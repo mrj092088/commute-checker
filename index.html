@@ -689,9 +689,9 @@ const WP_401_BROCK  = { latitude: 43.839,  longitude: -79.070 }; // 401 east of 
 const WP_407_MID    = { latitude: 43.822,  longitude: -79.366 }; // 407 / 404 interchange area
 
 const ROUTES = {
-  hwy401:     { label: "Full 401",     intermediates: [],                          avoidTolls: true  },
+  "401":      { label: "Full 401",     intermediates: [],                           avoidTolls: true  },
   partial407: { label: "Partial 407",  intermediates: [WP_407_ENTRY, WP_401_BROCK], avoidTolls: false },
-  full407:    { label: "Full 407",     intermediates: [WP_407_MID],                avoidTolls: false }
+  full407:    { label: "Full 407",     intermediates: [WP_407_MID],                 avoidTolls: false }
 };
 
 // ─── STORAGE / API KEY ────────────────────────────────
@@ -753,20 +753,12 @@ updateClock();
 
 // ─── ROUTE FETCH ─────────────────────────────────────
 function setLoading(routeId, loading) {
-  const ids = ["dur", "toll", "eta"];
-  const suffixIds = [`dur-${routeId}-sub`, `eta-${routeId}-sub`];
-
-  if (loading) {
-    document.getElementById(`dur-${routeId}`).classList.add("loading-shimmer");
-    document.getElementById(`toll-${routeId}`).classList.add("loading-shimmer");
-    document.getElementById(`eta-${routeId}`).classList.add("loading-shimmer");
-    document.getElementById(`dur-${routeId}-sub`).classList.add("loading-shimmer");
-  } else {
-    document.getElementById(`dur-${routeId}`).classList.remove("loading-shimmer");
-    document.getElementById(`toll-${routeId}`).classList.remove("loading-shimmer");
-    document.getElementById(`eta-${routeId}`).classList.remove("loading-shimmer");
-    document.getElementById(`dur-${routeId}-sub`).classList.remove("loading-shimmer");
-  }
+  const get = id => document.getElementById(id);
+  const toggle = (id, add) => { const el = get(id); if (el) el.classList[add ? "add" : "remove"]("loading-shimmer"); };
+  toggle(`dur-${routeId}`, loading);
+  toggle(`toll-${routeId}`, loading);
+  toggle(`eta-${routeId}`, loading);
+  toggle(`dur-${routeId}-sub`, loading);
 }
 
 function formatDuration(seconds) {
@@ -864,7 +856,7 @@ async function checkRoutes() {
 
   try {
     await Promise.all([
-      fetchRoute("hwy401"),
+      fetchRoute("401"),
       fetchRoute("partial407"),
       fetchRoute("full407")
     ]);
@@ -875,7 +867,7 @@ async function checkRoutes() {
     lu.style.display = "block";
   } catch(err) {
     showError(`API Error: ${err.message}`);
-    ["hwy401","partial407","full407"].forEach(id => setLoading(id, false));
+    ["401","partial407","full407"].forEach(id => setLoading(id, false));
   } finally {
     btn.disabled = false;
     btn.classList.remove("loading");
@@ -892,7 +884,7 @@ function showError(msg) {
 // ─── NAVIGATE ─────────────────────────────────────────
 // Waypoint addresses for navigation deep links
 const NAV_WPS = {
-  hwy401:     [],
+  "401":      [],
   partial407: ["43.686,-79.667", "43.839,-79.070"],
   full407:    ["43.822,-79.366"]
 };

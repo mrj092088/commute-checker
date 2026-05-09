@@ -348,26 +348,35 @@ tick();
 
 // ─── API KEY ──────────────────────────────────────────────────────────────────
 function loadKey() {
-  try {
-    var stored = localStorage.getItem("cmtr_key");
-    if (stored) {
-      apiKey = stored;
-      g("js-apikey").value = "••••••••••••••••••••••••••••••••";
-      markKeyOk();
-    }
-  } catch (e) {}
+  var found = "";
+  // Try localStorage first
+  try { found = localStorage.getItem("cmtr_key") || ""; } catch(e) {}
+  // Fallback: URL hash (e.g. index.html#AIza...)
+  if (!found && window.location.hash) {
+    var h = window.location.hash.replace("#","").trim();
+    if (h.length > 10) { found = h; }
+  }
+  if (found) {
+    apiKey = found;
+    var inp = g("js-apikey");
+    if (inp) { inp.value = found; }
+    markKeyOk();
+  }
 }
 
 function saveKey() {
   var input = g("js-apikey");
   var val = input.value.trim();
-  if (!val || val.indexOf("•") !== -1) {
+  if (!val || val.length < 10) {
     alert("Paste a valid API key first.");
     return;
   }
   apiKey = val;
-  try { localStorage.setItem("cmtr_key", val); } catch (e) {}
-  input.value = "••••••••••••••••••••••••••••••••";
+  // Try all persistence methods
+  try { localStorage.setItem("cmtr_key", val); } catch(e) {}
+  try { sessionStorage.setItem("cmtr_key", val); } catch(e) {}
+  // Store in URL hash as universal fallback (no privacy restrictions)
+  try { window.location.hash = val; } catch(e) {}
   markKeyOk();
 }
 
@@ -385,11 +394,18 @@ function toggleSetup() {
 
 // ─── FETCH ────────────────────────────────────────────────────────────────────
 function checkRoutes() {
-  var inputVal = g("js-apikey") ? g("js-apikey").value.trim() : "";
-  var key = apiKey || inputVal;
-
-  if (!key || key.indexOf("•") !== -1) {
-    showError("Enter and save your Google Maps API key first.");
+  // Resolve key: memory → input field → sessionStorage → hash
+  var key = apiKey;
+  if (!key) { try { key = sessionStorage.getItem("cmtr_key") || ""; } catch(e) {} }
+  if (!key) {
+    var inp = g("js-apikey");
+    if (inp) { key = inp.value.trim(); }
+  }
+  if (!key && window.location.hash) {
+    key = window.location.hash.replace("#","").trim();
+  }
+  if (!key || key.length < 10) {
+    showError("Paste your API key into the field above and tap Save.");
     return;
   }
   apiKey = key;

@@ -10,481 +10,89 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #080c12;
-    --surface: #0f1520;
-    --surface2: #161e2e;
-    --border: rgba(255,255,255,0.07);
-    --amber: #f5a623;
-    --amber-dim: rgba(245,166,35,0.12);
-    --green: #34d399;
-    --green-dim: rgba(52,211,153,0.1);
-    --red: #f87171;
-    --red-dim: rgba(248,113,113,0.1);
-    --blue: #60a5fa;
-    --text: #e8eaf0;
-    --text-muted: #6b7a96;
-    --text-dim: #3d4a62;
-    --safe-top: env(safe-area-inset-top, 0px);
-    --safe-bottom: env(safe-area-inset-bottom, 0px);
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
-  body {
-    font-family: 'Space Grotesk', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    min-height: 100dvh;
-    padding-top: calc(var(--safe-top) + 16px);
-    padding-bottom: calc(var(--safe-bottom) + 16px);
-    padding-left: 16px;
-    padding-right: 16px;
-    overflow-x: hidden;
-  }
-
-  /* HEADER */
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .logo-icon {
-    width: 36px; height: 36px;
-    background: var(--amber-dim);
-    border: 1px solid rgba(245,166,35,0.3);
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
-  }
-
-  .logo-text {
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--amber);
-  }
-
-  .logo-sub {
-    font-size: 11px;
-    color: var(--text-muted);
-    letter-spacing: 0.04em;
-    margin-top: 1px;
-  }
-
-  .time-display {
-    font-family: 'Space Mono', monospace;
-    font-size: 13px;
-    color: var(--text-muted);
-    text-align: right;
-  }
-
-  .time-display .clock {
-    font-size: 18px;
-    color: var(--text);
-    display: block;
-    line-height: 1;
-  }
-
-  /* ROUTE SUMMARY */
-  .route-summary {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 14px 16px;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .route-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  .dot-from { background: var(--green); }
-  .dot-to { background: var(--amber); }
-
-  .route-line {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    gap: 4px;
-  }
-
-  .route-addr {
-    font-size: 12px;
-    line-height: 1.3;
-  }
-
-  .route-addr .label { color: var(--text-muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; }
-  .route-addr .addr { color: var(--text); font-weight: 500; }
-
-  .route-divider {
-    width: 1px;
-    height: 28px;
-    background: var(--border);
-    margin: 2px 0;
-    align-self: center;
-  }
-
-  /* API KEY SECTION */
-  .api-section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 16px;
-    margin-bottom: 16px;
-  }
-
-  .api-section .section-label {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-muted);
-    margin-bottom: 10px;
-  }
-
-  .api-row {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
-
-  .api-input {
-    flex: 1;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    color: var(--text);
-    font-family: 'Space Mono', monospace;
-    font-size: 12px;
-    padding: 10px 14px;
-    outline: none;
-    -webkit-appearance: none;
-    transition: border-color 0.2s;
-  }
-
-  .api-input:focus { border-color: rgba(245,166,35,0.4); }
-  .api-input::placeholder { color: var(--text-dim); }
-
-  .api-save-btn {
-    background: var(--amber-dim);
-    border: 1px solid rgba(245,166,35,0.3);
-    border-radius: 10px;
-    color: var(--amber);
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    padding: 10px 16px;
-    cursor: pointer;
-    white-space: nowrap;
-    -webkit-appearance: none;
-  }
-
-  .api-status {
-    font-size: 11px;
-    margin-top: 8px;
-    color: var(--text-muted);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .api-status .dot-status {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-  }
-
-  /* FETCH BUTTON */
-  .fetch-btn {
-    width: 100%;
-    background: linear-gradient(135deg, #f5a623 0%, #e8920f 100%);
-    border: none;
-    border-radius: 14px;
-    color: #000;
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    padding: 16px;
-    cursor: pointer;
-    -webkit-appearance: none;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    transition: opacity 0.2s, transform 0.1s;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .fetch-btn:active { transform: scale(0.98); opacity: 0.9; }
-  .fetch-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-  .fetch-btn .pulse-ring {
-    position: absolute;
-    width: 100%; height: 100%;
-    border-radius: 14px;
-    animation: pulse 2s infinite;
-    border: 2px solid rgba(245,166,35,0.4);
-    top: 0; left: 0;
-    display: none;
-  }
-
-  .fetch-btn.loading .pulse-ring { display: block; }
-
-  @keyframes pulse {
-    0% { transform: scale(1); opacity: 0.8; }
-    100% { transform: scale(1.06); opacity: 0; }
-  }
-
-  /* ROUTE CARDS */
-  .cards-label {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-muted);
-    margin-bottom: 10px;
-  }
-
-  .route-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    margin-bottom: 12px;
-    overflow: hidden;
-    transition: border-color 0.3s;
-    position: relative;
-  }
-
-  .route-card.recommended {
-    border-color: rgba(245,166,35,0.35);
-    box-shadow: 0 0 0 1px rgba(245,166,35,0.1), 0 4px 24px rgba(245,166,35,0.08);
-  }
-
-  .card-header {
-    padding: 14px 16px 12px;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .card-title-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .route-indicator {
-    width: 4px;
-    height: 32px;
-    border-radius: 2px;
-    flex-shrink: 0;
-  }
-
-  .card-name { font-size: 16px; font-weight: 700; }
-  .card-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-
-  .card-badge {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    padding: 4px 10px;
-    border-radius: 6px;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  .card-metrics {
-    padding: 14px 16px;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 8px;
-  }
-
-  .metric {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-  }
-
-  .metric-label {
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-muted);
-  }
-
-  .metric-value {
-    font-family: 'Space Mono', monospace;
-    font-size: 18px;
-    font-weight: 700;
-    line-height: 1;
-    color: var(--text);
-  }
-
-  .metric-value.loading-shimmer {
-    background: linear-gradient(90deg, var(--surface2) 25%, var(--surface) 50%, var(--surface2) 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-    border-radius: 4px;
-    color: transparent;
-    min-width: 50px;
-    height: 22px;
-  }
-
-  @keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-  }
-
-  .metric-sub {
-    font-size: 10px;
-    color: var(--text-muted);
-  }
-
-  .metric-sub.loading-shimmer {
-    height: 12px;
-    border-radius: 3px;
-    min-width: 36px;
-    color: transparent;
-    background: linear-gradient(90deg, var(--surface2) 25%, var(--surface) 50%, var(--surface2) 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-  }
-
-  .card-footer {
-    padding: 12px 16px 14px;
-    border-top: 1px solid var(--border);
-    display: flex;
-    gap: 8px;
-  }
-
-  .nav-btn {
-    flex: 1;
-    padding: 10px;
-    border-radius: 10px;
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    -webkit-appearance: none;
-    border: none;
-    text-align: center;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-  }
-
-  .nav-btn-apple {
-    background: var(--surface2);
-    color: var(--text);
-    border: 1px solid var(--border);
-  }
-
-  .nav-btn-google {
-    background: var(--surface2);
-    color: var(--blue);
-    border: 1px solid rgba(96,165,250,0.2);
-  }
-
-  /* STATUS / ERRORS */
-  .status-bar {
-    font-size: 12px;
-    color: var(--text-muted);
-    text-align: center;
-    padding: 12px;
-    font-family: 'Space Mono', monospace;
-    display: none;
-  }
-
-  .error-msg {
-    background: rgba(248,113,113,0.08);
-    border: 1px solid rgba(248,113,113,0.2);
-    border-radius: 12px;
-    padding: 14px 16px;
-    font-size: 12px;
-    color: var(--red);
-    margin-bottom: 12px;
-    display: none;
-  }
-
-  /* LAST UPDATED */
-  .last-updated {
-    font-size: 11px;
-    color: var(--text-dim);
-    text-align: center;
-    font-family: 'Space Mono', monospace;
-    padding-top: 4px;
-    display: none;
-  }
-
-  /* SETUP GUIDE */
-  .setup-guide {
-    background: var(--surface);
-    border: 1px solid rgba(96,165,250,0.2);
-    border-radius: 14px;
-    padding: 16px;
-    margin-bottom: 16px;
-  }
-
-  .setup-guide h3 {
-    font-size: 13px;
-    color: var(--blue);
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .setup-guide ol {
-    font-size: 12px;
-    color: var(--text-muted);
-    padding-left: 16px;
-    line-height: 1.8;
-  }
-
-  .setup-guide a {
-    color: var(--blue);
-    text-decoration: none;
-  }
-
-  .setup-guide .note {
-    font-size: 11px;
-    color: var(--text-dim);
-    margin-top: 10px;
-    font-family: 'Space Mono', monospace;
-  }
-
-  .toggle-setup {
-    font-size: 11px;
-    color: var(--blue);
-    cursor: pointer;
-    text-align: center;
-    margin-bottom: 12px;
-    text-decoration: none;
-    display: block;
-  }
-
-  .hidden { display: none !important; }
+:root {
+  --bg: #080c12;
+  --surface: #0f1520;
+  --surface2: #161e2e;
+  --border: rgba(255,255,255,0.07);
+  --amber: #f5a623;
+  --amber-dim: rgba(245,166,35,0.12);
+  --green: #34d399;
+  --green-dim: rgba(52,211,153,0.1);
+  --red: #f87171;
+  --red-dim: rgba(248,113,113,0.1);
+  --blue: #60a5fa;
+  --text: #e8eaf0;
+  --muted: #6b7a96;
+  --dim: #3d4a62;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100dvh;
+  padding: calc(var(--safe-top) + 16px) 16px calc(var(--safe-bottom) + 16px);
+}
+.header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.logo { display: flex; align-items: center; gap: 10px; }
+.logo-icon { width: 36px; height: 36px; background: var(--amber-dim); border: 1px solid rgba(245,166,35,0.3); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+.logo-title { font-size: 14px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--amber); }
+.logo-sub { font-size: 11px; color: var(--muted); }
+.clock-wrap { text-align: right; }
+.clock-time { font-family: 'Space Mono', monospace; font-size: 20px; line-height: 1; }
+.clock-date { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted); }
+.route-summary { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; margin-bottom: 14px; display: flex; align-items: center; gap: 12px; }
+.dots { display: flex; flex-direction: column; align-items: center; }
+.dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.dot-line { width: 1px; height: 20px; background: var(--border); margin: 3px 0; }
+.dot-green { background: var(--green); }
+.dot-amber { background: var(--amber); }
+.addrs { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+.addr-block .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.addr-block .val { font-size: 13px; font-weight: 500; }
+.api-section { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; margin-bottom: 14px; }
+.section-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 10px; }
+.api-row { display: flex; gap: 8px; }
+.api-input { flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-family: 'Space Mono', monospace; font-size: 12px; padding: 10px 14px; outline: none; -webkit-appearance: none; }
+.api-input:focus { border-color: rgba(245,166,35,0.4); }
+.api-input::placeholder { color: var(--dim); }
+.save-btn { background: var(--amber-dim); border: 1px solid rgba(245,166,35,0.3); border-radius: 10px; color: var(--amber); font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600; padding: 10px 16px; cursor: pointer; white-space: nowrap; }
+.api-status { font-size: 11px; margin-top: 8px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+.status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--dim); flex-shrink: 0; }
+.setup-toggle { font-size: 11px; color: var(--blue); cursor: pointer; text-align: center; margin-bottom: 12px; display: block; }
+.setup-guide { background: var(--surface); border: 1px solid rgba(96,165,250,0.2); border-radius: 14px; padding: 16px; margin-bottom: 14px; display: none; }
+.setup-guide h3 { font-size: 13px; color: var(--blue); margin-bottom: 10px; }
+.setup-guide ol { font-size: 12px; color: var(--muted); padding-left: 18px; line-height: 2; }
+.setup-guide a { color: var(--blue); }
+.setup-guide .note { font-size: 11px; color: var(--dim); margin-top: 10px; font-family: 'Space Mono', monospace; }
+.fetch-btn { width: 100%; background: linear-gradient(135deg, #f5a623, #e8920f); border: none; border-radius: 14px; color: #000; font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 700; padding: 16px; cursor: pointer; margin-bottom: 18px; display: flex; align-items: center; justify-content: center; gap: 10px; transition: opacity 0.2s, transform 0.1s; }
+.fetch-btn:active { transform: scale(0.98); opacity: 0.9; }
+.fetch-btn:disabled { opacity: 0.5; }
+.error-box { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.2); border-radius: 12px; padding: 14px 16px; font-size: 12px; color: var(--red); margin-bottom: 14px; display: none; font-family: 'Space Mono', monospace; word-break: break-word; }
+.cards-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 10px; }
+.route-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; margin-bottom: 12px; overflow: hidden; }
+.route-card.best { border-color: rgba(245,166,35,0.35); }
+.card-head { padding: 14px 16px 12px; display: flex; align-items: flex-start; justify-content: space-between; border-bottom: 1px solid var(--border); }
+.card-title-row { display: flex; align-items: center; gap: 10px; }
+.card-bar { width: 4px; height: 32px; border-radius: 2px; flex-shrink: 0; }
+.card-name { font-size: 16px; font-weight: 700; }
+.card-desc { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.card-badge { font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 10px; border-radius: 6px; white-space: nowrap; flex-shrink: 0; }
+.card-metrics { padding: 14px 16px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.metric { display: flex; flex-direction: column; gap: 3px; }
+.metric-lbl { font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.metric-val { font-family: 'Space Mono', monospace; font-size: 18px; font-weight: 700; line-height: 1; }
+.metric-sub { font-size: 10px; color: var(--muted); }
+.shimmer { background: linear-gradient(90deg, var(--surface2) 25%, var(--surface) 50%, var(--surface2) 75%) !important; background-size: 200% 100% !important; animation: sh 1.4s infinite; border-radius: 4px; color: transparent !important; min-width: 40px; height: 20px; display: inline-block; }
+@keyframes sh { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+.card-foot { padding: 12px 16px 14px; border-top: 1px solid var(--border); display: flex; gap: 8px; }
+.nav-btn { flex: 1; padding: 10px; border-radius: 10px; font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; border: none; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.btn-apple { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+.btn-google { background: var(--surface2); color: var(--blue); border: 1px solid rgba(96,165,250,0.2); }
+.last-updated { font-size: 11px; color: var(--dim); text-align: center; font-family: 'Space Mono', monospace; padding-top: 4px; display: none; }
 </style>
 </head>
 <body>
@@ -493,308 +101,336 @@
   <div class="logo">
     <div class="logo-icon">🛣️</div>
     <div>
-      <div class="logo-text">Commute</div>
+      <div class="logo-title">Commute</div>
       <div class="logo-sub">MSS → OSH</div>
     </div>
   </div>
-  <div class="time-display">
-    <span class="clock" id="clock">--:--</span>
-    <span id="date-display" style="font-size:11px"></span>
+  <div class="clock-wrap">
+    <div class="clock-time" id="js-clock">--:--</div>
+    <div class="clock-date" id="js-date"></div>
   </div>
 </div>
 
-<!-- Route Summary -->
 <div class="route-summary">
-  <div style="display:flex;flex-direction:column;gap:6px;min-width:10px">
-    <div class="route-dot dot-from"></div>
-    <div style="width:1px;height:16px;background:var(--border);margin-left:3px"></div>
-    <div class="route-dot dot-to"></div>
+  <div class="dots">
+    <div class="dot dot-green"></div>
+    <div class="dot-line"></div>
+    <div class="dot dot-amber"></div>
   </div>
-  <div class="route-line">
-    <div class="route-addr">
-      <div class="label">From</div>
-      <div class="addr">7070 Derrycrest Dr, Mississauga</div>
+  <div class="addrs">
+    <div class="addr-block">
+      <div class="lbl">From</div>
+      <div class="val">7070 Derrycrest Dr, Mississauga</div>
     </div>
-    <div style="height:1px;background:var(--border);margin:6px 0"></div>
-    <div class="route-addr">
-      <div class="label">To</div>
-      <div class="addr">307 Homestead Dr, Oshawa</div>
+    <div class="addr-block">
+      <div class="lbl">To</div>
+      <div class="val">307 Homestead Dr, Oshawa</div>
     </div>
   </div>
 </div>
 
-<!-- API Key -->
 <div class="api-section">
-  <div class="section-label">Google Maps API Key</div>
+  <div class="section-lbl">Google Maps API Key</div>
   <div class="api-row">
-    <input type="password" class="api-input" id="apiKeyInput" placeholder="AIza••••••••••••••••••••••••••••••••" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-    <button class="api-save-btn" onclick="saveApiKey()">Save</button>
+    <input type="password" id="js-apikey" class="api-input"
+      placeholder="AIza••••••••••••••••••••••"
+      autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+    <button class="save-btn" onclick="saveKey()">Save</button>
   </div>
-  <div class="api-status" id="apiStatus">
-    <div class="dot-status" style="background:var(--text-dim)"></div>
-    <span>No key saved</span>
+  <div class="api-status">
+    <div class="status-dot" id="js-status-dot"></div>
+    <span id="js-status-text">No key saved</span>
   </div>
 </div>
 
-<!-- Setup Guide Toggle -->
-<a class="toggle-setup" onclick="document.getElementById('setupGuide').classList.toggle('hidden')">ⓘ How to get a free Google Maps API key</a>
-
-<div class="setup-guide hidden" id="setupGuide">
-  <h3>🔑 One-time Setup (~5 min)</h3>
+<span class="setup-toggle" onclick="toggleSetup()">ⓘ How to get a free Google Maps API key</span>
+<div class="setup-guide" id="js-setup">
+  <h3>🔑 One-time setup (~5 min)</h3>
   <ol>
     <li>Go to <a href="https://console.cloud.google.com" target="_blank">console.cloud.google.com</a></li>
     <li>Create a project (e.g. "Commute")</li>
-    <li>Enable: <strong>Routes API</strong></li>
-    <li>Go to <strong>APIs & Services → Credentials</strong></li>
-    <li>Create an <strong>API key</strong> — restrict it to your IP or HTTP referrer</li>
+    <li>Enable the <strong>Routes API</strong></li>
+    <li>Go to <strong>APIs &amp; Services → Credentials</strong></li>
+    <li>Create an API key, restrict it to Routes API only</li>
     <li>Paste it above and tap Save</li>
   </ol>
-  <p class="note">* Free tier: 10,000 route requests/month. Well within personal use.</p>
+  <p class="note">* Free tier covers ~10,000 requests/month.</p>
 </div>
 
-<!-- Fetch Button -->
-<button class="fetch-btn" id="fetchBtn" onclick="checkRoutes()">
-  <div class="pulse-ring"></div>
-  <span>🔍</span>
-  <span id="btnText">Check Routes Now</span>
+<button class="fetch-btn" id="js-fetch-btn" onclick="checkRoutes()">
+  <span>🔍</span><span id="js-btn-text">Check Routes Now</span>
 </button>
 
-<!-- Error -->
-<div class="error-msg" id="errorMsg"></div>
+<div class="error-box" id="js-error"></div>
 
-<!-- Cards label -->
-<div class="cards-label">Route Comparison</div>
+<div class="cards-lbl">Route Comparison</div>
 
-<!-- Route Cards -->
-<div id="cards-container">
-  <!-- Card: Full 401 -->
-  <div class="route-card" id="card-hwy401">
-    <div class="card-header">
-      <div class="card-title-row">
-        <div class="route-indicator" style="background:var(--green)"></div>
-        <div>
-          <div class="card-name">Highway 401</div>
-          <div class="card-desc">No tolls — full 401 corridor</div>
-        </div>
-      </div>
-      <div class="card-badge" style="background:var(--green-dim);color:var(--green)">No Toll</div>
-    </div>
-    <div class="card-metrics">
-      <div class="metric">
-        <div class="metric-label">Duration</div>
-        <div class="metric-value" id="dur-401">--</div>
-        <div class="metric-sub" id="dur-401-sub">min</div>
-      </div>
-      <div class="metric">
-        <div class="metric-label">Toll Cost</div>
-        <div class="metric-value" style="color:var(--green)" id="toll-401">$0</div>
-        <div class="metric-sub">CAD</div>
-      </div>
-      <div class="metric">
-        <div class="metric-label">Arrives</div>
-        <div class="metric-value" id="eta-401" style="font-size:14px">--:--</div>
-        <div class="metric-sub" id="eta-401-sub"></div>
+<!-- r401 -->
+<div class="route-card">
+  <div class="card-head">
+    <div class="card-title-row">
+      <div class="card-bar" style="background:var(--green)"></div>
+      <div>
+        <div class="card-name">Highway 401</div>
+        <div class="card-desc">No tolls — full 401 corridor</div>
       </div>
     </div>
-    <div class="card-footer">
-      <a class="nav-btn nav-btn-apple" id="apple-401" href="#" onclick="navigate('apple','401')">🍎 Apple Maps</a>
-      <a class="nav-btn nav-btn-google" id="google-401" href="#" onclick="navigate('google','401')">🗺 Google Maps</a>
+    <div class="card-badge" style="background:var(--green-dim);color:var(--green)">No Toll</div>
+  </div>
+  <div class="card-metrics">
+    <div class="metric">
+      <div class="metric-lbl">Duration</div>
+      <div class="metric-val" id="r401-dur">--</div>
+      <div class="metric-sub" id="r401-sub">min</div>
+    </div>
+    <div class="metric">
+      <div class="metric-lbl">Toll Cost</div>
+      <div class="metric-val" id="r401-toll" style="color:var(--green)">$0</div>
+      <div class="metric-sub">CAD</div>
+    </div>
+    <div class="metric">
+      <div class="metric-lbl">Arrives</div>
+      <div class="metric-val" id="r401-eta" style="font-size:15px">--:--</div>
+      <div class="metric-sub" id="r401-ampm"></div>
     </div>
   </div>
-
-  <!-- Card: Partial 407 -->
-  <div class="route-card recommended" id="card-partial407">
-    <div class="card-header">
-      <div class="card-title-row">
-        <div class="route-indicator" style="background:var(--amber)"></div>
-        <div>
-          <div class="card-name">Partial 407</div>
-          <div class="card-desc">Hurontario → Brock Rd, then 401</div>
-        </div>
-      </div>
-      <div class="card-badge" style="background:var(--amber-dim);color:var(--amber)">★ Best</div>
-    </div>
-    <div class="card-metrics">
-      <div class="metric">
-        <div class="metric-label">Duration</div>
-        <div class="metric-value" id="dur-partial407">--</div>
-        <div class="metric-sub" id="dur-partial407-sub">min</div>
-      </div>
-      <div class="metric">
-        <div class="metric-label">Toll Cost</div>
-        <div class="metric-value" style="color:var(--amber)" id="toll-partial407">--</div>
-        <div class="metric-sub">CAD est.</div>
-      </div>
-      <div class="metric">
-        <div class="metric-label">Arrives</div>
-        <div class="metric-value" id="eta-partial407" style="font-size:14px">--:--</div>
-        <div class="metric-sub" id="eta-partial407-sub"></div>
-      </div>
-    </div>
-    <div class="card-footer">
-      <a class="nav-btn nav-btn-apple" id="apple-partial407" href="#" onclick="navigate('apple','partial407')">🍎 Apple Maps</a>
-      <a class="nav-btn nav-btn-google" id="google-partial407" href="#" onclick="navigate('google','partial407')">🗺 Google Maps</a>
-    </div>
-  </div>
-
-  <!-- Card: Full 407 -->
-  <div class="route-card" id="card-full407">
-    <div class="card-header">
-      <div class="card-title-row">
-        <div class="route-indicator" style="background:var(--red)"></div>
-        <div>
-          <div class="card-name">Full 407</div>
-          <div class="card-desc">407 end-to-end — maximum bypass</div>
-        </div>
-      </div>
-      <div class="card-badge" style="background:var(--red-dim);color:var(--red)">Max Cost</div>
-    </div>
-    <div class="card-metrics">
-      <div class="metric">
-        <div class="metric-label">Duration</div>
-        <div class="metric-value" id="dur-full407">--</div>
-        <div class="metric-sub" id="dur-full407-sub">min</div>
-      </div>
-      <div class="metric">
-        <div class="metric-label">Toll Cost</div>
-        <div class="metric-value" style="color:var(--red)" id="toll-full407">--</div>
-        <div class="metric-sub">CAD est.</div>
-      </div>
-      <div class="metric">
-        <div class="metric-label">Arrives</div>
-        <div class="metric-value" id="eta-full407" style="font-size:14px">--:--</div>
-        <div class="metric-sub" id="eta-full407-sub"></div>
-      </div>
-    </div>
-    <div class="card-footer">
-      <a class="nav-btn nav-btn-apple" id="apple-full407" href="#" onclick="navigate('apple','full407')">🍎 Apple Maps</a>
-      <a class="nav-btn nav-btn-google" id="google-full407" href="#" onclick="navigate('google','full407')">🗺 Google Maps</a>
-    </div>
+  <div class="card-foot">
+    <button class="nav-btn btn-apple" onclick="openNav('apple','r401')">🍎 Apple Maps</button>
+    <button class="nav-btn btn-google" onclick="openNav('google','r401')">🗺 Google Maps</button>
   </div>
 </div>
 
-<div class="last-updated" id="lastUpdated"></div>
+<!-- r407p -->
+<div class="route-card best">
+  <div class="card-head">
+    <div class="card-title-row">
+      <div class="card-bar" style="background:var(--amber)"></div>
+      <div>
+        <div class="card-name">Partial 407</div>
+        <div class="card-desc">Hurontario → Brock Rd, then 401</div>
+      </div>
+    </div>
+    <div class="card-badge" style="background:var(--amber-dim);color:var(--amber)">★ Best</div>
+  </div>
+  <div class="card-metrics">
+    <div class="metric">
+      <div class="metric-lbl">Duration</div>
+      <div class="metric-val" id="r407p-dur">--</div>
+      <div class="metric-sub" id="r407p-sub">min</div>
+    </div>
+    <div class="metric">
+      <div class="metric-lbl">Toll Cost</div>
+      <div class="metric-val" id="r407p-toll" style="color:var(--amber)">--</div>
+      <div class="metric-sub">CAD est.</div>
+    </div>
+    <div class="metric">
+      <div class="metric-lbl">Arrives</div>
+      <div class="metric-val" id="r407p-eta" style="font-size:15px">--:--</div>
+      <div class="metric-sub" id="r407p-ampm"></div>
+    </div>
+  </div>
+  <div class="card-foot">
+    <button class="nav-btn btn-apple" onclick="openNav('apple','r407p')">🍎 Apple Maps</button>
+    <button class="nav-btn btn-google" onclick="openNav('google','r407p')">🗺 Google Maps</button>
+  </div>
+</div>
+
+<!-- r407f -->
+<div class="route-card">
+  <div class="card-head">
+    <div class="card-title-row">
+      <div class="card-bar" style="background:var(--red)"></div>
+      <div>
+        <div class="card-name">Full 407</div>
+        <div class="card-desc">407 end-to-end — maximum bypass</div>
+      </div>
+    </div>
+    <div class="card-badge" style="background:var(--red-dim);color:var(--red)">Max Cost</div>
+  </div>
+  <div class="card-metrics">
+    <div class="metric">
+      <div class="metric-lbl">Duration</div>
+      <div class="metric-val" id="r407f-dur">--</div>
+      <div class="metric-sub" id="r407f-sub">min</div>
+    </div>
+    <div class="metric">
+      <div class="metric-lbl">Toll Cost</div>
+      <div class="metric-val" id="r407f-toll" style="color:var(--red)">--</div>
+      <div class="metric-sub">CAD est.</div>
+    </div>
+    <div class="metric">
+      <div class="metric-lbl">Arrives</div>
+      <div class="metric-val" id="r407f-eta" style="font-size:15px">--:--</div>
+      <div class="metric-sub" id="r407f-ampm"></div>
+    </div>
+  </div>
+  <div class="card-foot">
+    <button class="nav-btn btn-apple" onclick="openNav('apple','r407f')">🍎 Apple Maps</button>
+    <button class="nav-btn btn-google" onclick="openNav('google','r407f')">🗺 Google Maps</button>
+  </div>
+</div>
+
+<div class="last-updated" id="js-updated"></div>
 
 <script>
-// ─── CONFIG ───────────────────────────────────────────
-const ORIGIN_LAT = 43.6441, ORIGIN_LNG = -79.7101;
-const DEST_LAT   = 43.8981, DEST_LNG   = -78.9008;
-const ORIGIN_ADDR = "7070 Derrycrest Dr, Mississauga, ON L5W 0G5";
-const DEST_ADDR   = "307 Homestead Dr, Oshawa, ON L1J 6V2";
+// ─── CONFIG ───────────────────────────────────────────────────────────────────
+var ORIGIN_ADDR = "7070 Derrycrest Dr, Mississauga, ON L5W 0G5";
+var DEST_ADDR   = "307 Homestead Dr, Oshawa, ON L1J 6V2";
+var ORIGIN_LAT  = 43.6441, ORIGIN_LNG = -79.7101;
+var DEST_LAT    = 43.8981, DEST_LNG   = -78.9008;
 
-// Via waypoints for Partial 407 (on-407 point + point on 401 east of Brock Rd)
-const WP_407_ENTRY  = { latitude: 43.686,  longitude: -79.667 }; // 407 near Hwy 410
-const WP_401_BROCK  = { latitude: 43.839,  longitude: -79.070 }; // 401 east of Brock Rd, Pickering
-// Via waypoint for Full 407 (mid-407 near 404 interchange)
-const WP_407_MID    = { latitude: 43.822,  longitude: -79.366 }; // 407 / 404 interchange area
-
-const ROUTES = {
-  "401":      { label: "Full 401",     intermediates: [],                           avoidTolls: true  },
-  partial407: { label: "Partial 407",  intermediates: [WP_407_ENTRY, WP_401_BROCK], avoidTolls: false },
-  full407:    { label: "Full 407",     intermediates: [WP_407_MID],                 avoidTolls: false }
+// Each key matches the ID prefix used in HTML (e.g. r401-dur, r401-toll, r401-eta)
+var ROUTES = {
+  r401: {
+    avoidTolls: true,
+    intermediates: []
+  },
+  r407p: {
+    avoidTolls: false,
+    intermediates: [
+      { latitude: 43.686, longitude: -79.667 },
+      { latitude: 43.839, longitude: -79.070 }
+    ]
+  },
+  r407f: {
+    avoidTolls: false,
+    intermediates: [
+      { latitude: 43.822, longitude: -79.366 }
+    ]
+  }
 };
 
-// ─── STORAGE / API KEY ────────────────────────────────
-let savedApiKey = "";
+var NAV_WPS = {
+  r401:  [],
+  r407p: ["43.686,-79.667", "43.839,-79.070"],
+  r407f: ["43.822,-79.366"]
+};
 
-async function loadApiKey() {
-  try {
-    let key = null;
-    if (typeof window.storage !== "undefined" && window.storage) {
-      const res = await window.storage.get("gmaps_api_key");
-      key = res?.value || null;
-    } else {
-      key = localStorage.getItem("gmaps_api_key");
-    }
-    if (key) {
-      savedApiKey = key;
-      document.getElementById("apiKeyInput").value = "••••••••••••••••••••••••••••••••";
-      updateApiStatus(true);
-    }
-  } catch(e) { /* first run */ }
+// ─── STATE ────────────────────────────────────────────────────────────────────
+var apiKey = "";
+
+// ─── UTILS ────────────────────────────────────────────────────────────────────
+function g(id) {
+  return document.getElementById(id);
 }
 
-async function saveApiKey() {
-  const val = document.getElementById("apiKeyInput").value.trim();
-  if (!val || val.includes("•")) { alert("Please enter a valid API key."); return; }
-  try {
-    if (typeof window.storage !== "undefined" && window.storage) {
-      await window.storage.set("gmaps_api_key", val);
-    } else {
-      localStorage.setItem("gmaps_api_key", val);
-    }
-  } catch(e) { /* storage unavailable, key lives in memory only */ }
-  savedApiKey = val;
-  document.getElementById("apiKeyInput").value = "••••••••••••••••••••••••••••••••";
-  updateApiStatus(true);
+function setText(id, val) {
+  var node = g(id);
+  if (node) { node.textContent = String(val); }
 }
 
-function updateApiStatus(hasKey) {
-  const el = document.getElementById("apiStatus");
-  if (hasKey) {
-    el.innerHTML = `<div class="dot-status" style="background:var(--green);width:6px;height:6px;border-radius:50%"></div><span style="color:var(--green)">Key saved ✓</span>`;
-  } else {
-    el.innerHTML = `<div class="dot-status" style="background:var(--text-dim);width:6px;height:6px;border-radius:50%"></div><span>No key saved</span>`;
+function pad(n) {
+  return n < 10 ? "0" + n : "" + n;
+}
+
+function setShimmer(prefix, on) {
+  var ids = [prefix + "-dur", prefix + "-sub", prefix + "-toll", prefix + "-eta"];
+  for (var i = 0; i < ids.length; i++) {
+    var node = g(ids[i]);
+    if (node) {
+      if (on) { node.classList.add("shimmer"); }
+      else    { node.classList.remove("shimmer"); }
+    }
   }
 }
 
-// ─── CLOCK ────────────────────────────────────────────
-function updateClock() {
-  const now = new Date();
-  const h = now.getHours().toString().padStart(2,"0");
-  const m = now.getMinutes().toString().padStart(2,"0");
-  document.getElementById("clock").textContent = `${h}:${m}`;
-  const days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-  document.getElementById("date-display").textContent = `${days[now.getDay()]} ${months[now.getMonth()]} ${now.getDate()}`;
+// ─── CLOCK ────────────────────────────────────────────────────────────────────
+function tick() {
+  var now  = new Date();
+  var h = now.getHours(), m = now.getMinutes();
+  setText("js-clock", pad(h) + ":" + pad(m));
+  var days   = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  setText("js-date", days[now.getDay()] + " " + months[now.getMonth()] + " " + now.getDate());
 }
-setInterval(updateClock, 1000);
-updateClock();
+setInterval(tick, 1000);
+tick();
 
-// ─── ROUTE FETCH ─────────────────────────────────────
-function setLoading(routeId, loading) {
-  const get = id => document.getElementById(id);
-  const toggle = (id, add) => { const el = get(id); if (el) el.classList[add ? "add" : "remove"]("loading-shimmer"); };
-  toggle(`dur-${routeId}`, loading);
-  toggle(`toll-${routeId}`, loading);
-  toggle(`eta-${routeId}`, loading);
-  toggle(`dur-${routeId}-sub`, loading);
-}
-
-function formatDuration(seconds) {
-  const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  if (h > 0) return { value: `${h}h ${m}m`, sub: "hr:min" };
-  return { value: `${m}`, sub: "min" };
+// ─── API KEY ──────────────────────────────────────────────────────────────────
+function loadKey() {
+  try {
+    var stored = localStorage.getItem("cmtr_key");
+    if (stored) {
+      apiKey = stored;
+      g("js-apikey").value = "••••••••••••••••••••••••••••••••";
+      markKeyOk();
+    }
+  } catch (e) {}
 }
 
-function formatETA(seconds) {
-  const arr = new Date(Date.now() + seconds * 1000);
-  const h = arr.getHours(), m = arr.getMinutes().toString().padStart(2,"0");
-  const ampm = h >= 12 ? "PM" : "AM";
-  const h12 = h % 12 || 12;
-  return { value: `${h12}:${m}`, sub: ampm };
-}
-
-function formatToll(tollInfo) {
-  if (!tollInfo || !tollInfo.estimatedPrice || tollInfo.estimatedPrice.length === 0) {
-    return "$0";
+function saveKey() {
+  var input = g("js-apikey");
+  var val = input.value.trim();
+  if (!val || val.indexOf("•") !== -1) {
+    alert("Paste a valid API key first.");
+    return;
   }
-  const p = tollInfo.estimatedPrice[0];
-  const dollars = parseInt(p.units || 0);
-  const cents = Math.round((p.nanos || 0) / 1e7);
-  const total = dollars + cents / 100;
-  return `$${total.toFixed(0)}`;
+  apiKey = val;
+  try { localStorage.setItem("cmtr_key", val); } catch (e) {}
+  input.value = "••••••••••••••••••••••••••••••••";
+  markKeyOk();
 }
 
-async function fetchRoute(routeId) {
-  const cfg = ROUTES[routeId];
-  setLoading(routeId, true);
+function markKeyOk() {
+  var dot = g("js-status-dot");
+  var txt = g("js-status-text");
+  if (dot) { dot.style.background = "var(--green)"; }
+  if (txt) { txt.textContent = "Key saved ✓"; txt.style.color = "var(--green)"; }
+}
 
-  const body = {
-    origin: { address: ORIGIN_ADDR },
+function toggleSetup() {
+  var el = g("js-setup");
+  if (el) { el.style.display = el.style.display === "block" ? "none" : "block"; }
+}
+
+// ─── FETCH ────────────────────────────────────────────────────────────────────
+function checkRoutes() {
+  var inputVal = g("js-apikey") ? g("js-apikey").value.trim() : "";
+  var key = apiKey || inputVal;
+
+  if (!key || key.indexOf("•") !== -1) {
+    showError("Enter and save your Google Maps API key first.");
+    return;
+  }
+  apiKey = key;
+
+  var btn = g("js-fetch-btn");
+  if (btn) { btn.disabled = true; }
+  setText("js-btn-text", "Fetching live traffic…");
+
+  var errBox = g("js-error");
+  if (errBox) { errBox.style.display = "none"; }
+
+  var ids = ["r401", "r407p", "r407f"];
+  for (var i = 0; i < ids.length; i++) { setShimmer(ids[i], true); }
+
+  var promises = ids.map(function(id) { return fetchRoute(id, key); });
+
+  Promise.all(promises)
+    .then(function() {
+      var now = new Date();
+      setText("js-updated", "Last updated " + pad(now.getHours()) + ":" + pad(now.getMinutes()));
+      var u = g("js-updated");
+      if (u) { u.style.display = "block"; }
+    })
+    .catch(function(err) {
+      var msg = (err && err.message) ? err.message : String(err);
+      showError("API Error: " + msg);
+      for (var i = 0; i < ids.length; i++) { setShimmer(ids[i], false); }
+    })
+    .finally(function() {
+      var b = g("js-fetch-btn");
+      if (b) { b.disabled = false; }
+      setText("js-btn-text", "Refresh Routes");
+    });
+}
+
+function fetchRoute(prefix, key) {
+  var cfg  = ROUTES[prefix];
+  var body = {
+    origin:      { address: ORIGIN_ADDR },
     destination: { address: DEST_ADDR },
-    travelMode: "DRIVE",
+    travelMode:  "DRIVE",
     routingPreference: "TRAFFIC_AWARE_OPTIMAL",
     computeAlternativeRoutes: false,
     extraComputations: ["TOLLS"],
@@ -802,113 +438,106 @@ async function fetchRoute(routeId) {
   };
 
   if (cfg.intermediates.length > 0) {
-    body.intermediates = cfg.intermediates.map(wp => ({
-      via: true,
-      location: { latLng: wp }
-    }));
+    body.intermediates = cfg.intermediates.map(function(wp) {
+      return { via: true, location: { latLng: { latitude: wp.latitude, longitude: wp.longitude } } };
+    });
   }
 
-  const url = `https://routes.googleapis.com/directions/v2:computeRoutes?key=${savedApiKey}`;
-  const res = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Goog-FieldMask": "routes.duration,routes.distanceMeters,routes.travelAdvisory.tollInfo"
-    },
-    body: JSON.stringify(body)
+  return fetch(
+    "https://routes.googleapis.com/directions/v2:computeRoutes?key=" + key,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Goog-FieldMask": "routes.duration,routes.distanceMeters,routes.travelAdvisory.tollInfo"
+      },
+      body: JSON.stringify(body)
+    }
+  )
+  .then(function(res) {
+    return res.json().then(function(data) {
+      return { ok: res.ok, status: res.status, data: data };
+    });
+  })
+  .then(function(r) {
+    if (!r.ok) {
+      var apiMsg = r.data && r.data.error && r.data.error.message ? r.data.error.message : ("HTTP " + r.status);
+      throw new Error("[" + prefix + "] " + apiMsg);
+    }
+    if (!r.data.routes || r.data.routes.length === 0) {
+      throw new Error("[" + prefix + "] No route returned");
+    }
+
+    var route    = r.data.routes[0];
+    var durStr   = (route.duration || "0s").replace("s", "");
+    var durSec   = parseInt(durStr, 10) || 0;
+    var tollInfo = route.travelAdvisory && route.travelAdvisory.tollInfo ? route.travelAdvisory.tollInfo : null;
+
+    var dur  = fmtDur(durSec);
+    var eta  = fmtETA(durSec);
+    var toll = fmtToll(tollInfo);
+
+    setShimmer(prefix, false);
+    setText(prefix + "-dur",  dur.val);
+    setText(prefix + "-sub",  dur.sub);
+    setText(prefix + "-toll", toll);
+    setText(prefix + "-eta",  eta.val);
+    setText(prefix + "-ampm", eta.ampm);
   });
-
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error?.message || `HTTP ${res.status}`);
-  if (!data.routes || data.routes.length === 0) throw new Error("No route found");
-
-  const route = data.routes[0];
-  const durSec = parseInt(route.duration?.replace("s","") || "0");
-  const tollInfo = route.travelAdvisory?.tollInfo;
-
-  const dur = formatDuration(durSec);
-  const eta = formatETA(durSec);
-  const toll = formatToll(tollInfo);
-
-  setLoading(routeId, false);
-  document.getElementById(`dur-${routeId}`).textContent = dur.value;
-  document.getElementById(`dur-${routeId}-sub`).textContent = dur.sub;
-  document.getElementById(`toll-${routeId}`).textContent = toll;
-  document.getElementById(`eta-${routeId}`).textContent = eta.value;
-  document.getElementById(`eta-${routeId}-sub`).textContent = eta.sub;
-
-  return durSec;
 }
 
-async function checkRoutes() {
-  const key = savedApiKey || document.getElementById("apiKeyInput").value.trim();
-  if (!key || key.includes("•")) {
-    showError("Enter and save a Google Maps API key first.");
-    return;
-  }
-  savedApiKey = key;
-
-  const btn = document.getElementById("fetchBtn");
-  btn.disabled = true;
-  btn.classList.add("loading");
-  document.getElementById("btnText").textContent = "Fetching live traffic…";
-  document.getElementById("errorMsg").style.display = "none";
-
-  try {
-    await Promise.all([
-      fetchRoute("401"),
-      fetchRoute("partial407"),
-      fetchRoute("full407")
-    ]);
-
-    const now = new Date().toLocaleTimeString("en-CA", { hour: "2-digit", minute: "2-digit" });
-    const lu = document.getElementById("lastUpdated");
-    lu.textContent = `Last updated ${now}`;
-    lu.style.display = "block";
-  } catch(err) {
-    showError(`API Error: ${err.message}`);
-    ["401","partial407","full407"].forEach(id => setLoading(id, false));
-  } finally {
-    btn.disabled = false;
-    btn.classList.remove("loading");
-    document.getElementById("btnText").textContent = "Refresh Routes";
-  }
+// ─── FORMATTERS ───────────────────────────────────────────────────────────────
+function fmtDur(sec) {
+  var h = Math.floor(sec / 3600);
+  var m = Math.floor((sec % 3600) / 60);
+  if (h > 0) { return { val: h + "h " + m + "m", sub: "hr : min" }; }
+  return { val: "" + m, sub: "min" };
 }
 
-function showError(msg) {
-  const el = document.getElementById("errorMsg");
-  el.textContent = msg;
-  el.style.display = "block";
+function fmtETA(sec) {
+  var arr  = new Date(Date.now() + sec * 1000);
+  var h    = arr.getHours();
+  var m    = arr.getMinutes();
+  var ampm = h >= 12 ? "PM" : "AM";
+  var h12  = h % 12 || 12;
+  return { val: h12 + ":" + pad(m), ampm: ampm };
 }
 
-// ─── NAVIGATE ─────────────────────────────────────────
-// Waypoint addresses for navigation deep links
-const NAV_WPS = {
-  "401":      [],
-  partial407: ["43.686,-79.667", "43.839,-79.070"],
-  full407:    ["43.822,-79.366"]
-};
+function fmtToll(tollInfo) {
+  if (!tollInfo) { return "$0"; }
+  var prices = tollInfo.estimatedPrice;
+  if (!prices || prices.length === 0) { return "$0"; }
+  var p       = prices[0];
+  var dollars = parseInt(p.units || 0, 10);
+  var cents   = Math.round((p.nanos || 0) / 1e7);
+  return "$" + (dollars + cents / 100).toFixed(0);
+}
 
-function navigate(platform, routeId) {
-  const origin = `${ORIGIN_LAT},${ORIGIN_LNG}`;
-  const dest   = `${DEST_LAT},${DEST_LNG}`;
-  const wps    = NAV_WPS[routeId];
-
+// ─── NAVIGATION ───────────────────────────────────────────────────────────────
+function openNav(platform, prefix) {
+  var wps = NAV_WPS[prefix] || [];
   if (platform === "apple") {
-    // Apple Maps URL scheme
-    let url = `maps://maps.apple.com/?saddr=${origin}&daddr=${dest}&dirflg=d`;
-    if (wps.length > 0) url += `&intermediate=${wps.join(",")}`;
+    var url = "maps://maps.apple.com/?saddr=" + ORIGIN_LAT + "," + ORIGIN_LNG +
+              "&daddr=" + DEST_LAT + "," + DEST_LNG + "&dirflg=d";
     window.location.href = url;
   } else {
-    // Google Maps URL (opens app if installed, otherwise browser)
-    let url = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(ORIGIN_ADDR)}&destination=${encodeURIComponent(DEST_ADDR)}&travelmode=driving`;
-    if (wps.length > 0) url += `&waypoints=${encodeURIComponent(wps.join("|"))}`;
+    var url = "https://www.google.com/maps/dir/?api=1" +
+              "&origin=" + encodeURIComponent(ORIGIN_ADDR) +
+              "&destination=" + encodeURIComponent(DEST_ADDR) +
+              "&travelmode=driving";
+    if (wps.length > 0) { url += "&waypoints=" + encodeURIComponent(wps.join("|")); }
     window.open(url, "_blank");
   }
 }
 
-// ─── INIT ─────────────────────────────────────────────
-loadApiKey();
+// ─── ERROR ────────────────────────────────────────────────────────────────────
+function showError(msg) {
+  var box = g("js-error");
+  if (box) { box.textContent = msg; box.style.display = "block"; }
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+loadKey();
 </script>
 </body>
 </html>

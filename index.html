@@ -7,97 +7,105 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Commute">
 <title>Commute Checker</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #080c12;
-  --surface: #0f1520;
-  --surface2: #161e2e;
-  --border: rgba(255,255,255,0.07);
-  --amber: #f5a623;
-  --amber-dim: rgba(245,166,35,0.12);
-  --green: #34d399;
-  --green-dim: rgba(52,211,153,0.1);
-  --red: #f87171;
-  --red-dim: rgba(248,113,113,0.1);
-  --blue: #60a5fa;
-  --text: #e8eaf0;
-  --muted: #6b7a96;
-  --dim: #3d4a62;
-  --safe-top: env(safe-area-inset-top, 0px);
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --bg:#080c12; --surf:#0f1520; --surf2:#161e2e;
+  --bdr:rgba(255,255,255,0.07);
+  --amber:#f5a623; --amber-dim:rgba(245,166,35,0.12); --amber-bdr:rgba(245,166,35,0.3);
+  --green:#34d399; --green-dim:rgba(52,211,153,0.1);
+  --red:#f87171; --red-dim:rgba(248,113,113,0.1);
+  --blue:#60a5fa;
+  --txt:#e8eaf0; --muted:#6b7a96; --dim:#3d4a62;
+  --st:env(safe-area-inset-top,0px); --sb:env(safe-area-inset-bottom,0px);
 }
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body {
-  font-family: 'Space Grotesk', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100dvh;
-  padding: calc(var(--safe-top) + 16px) 16px calc(var(--safe-bottom) + 16px);
-}
-.header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-.logo { display: flex; align-items: center; gap: 10px; }
-.logo-icon { width: 36px; height: 36px; background: var(--amber-dim); border: 1px solid rgba(245,166,35,0.3); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
-.logo-title { font-size: 14px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--amber); }
-.logo-sub { font-size: 11px; color: var(--muted); }
-.clock-wrap { text-align: right; }
-.clock-time { font-family: 'Space Mono', monospace; font-size: 20px; line-height: 1; }
-.clock-date { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted); }
-.route-summary { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; margin-bottom: 14px; display: flex; align-items: center; gap: 12px; }
-.dots { display: flex; flex-direction: column; align-items: center; }
-.dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.dot-line { width: 1px; height: 20px; background: var(--border); margin: 3px 0; }
-.dot-green { background: var(--green); }
-.dot-amber { background: var(--amber); }
-.addrs { flex: 1; display: flex; flex-direction: column; gap: 10px; }
-.addr-block .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
-.addr-block .val { font-size: 13px; font-weight: 500; }
-.api-section { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; margin-bottom: 14px; }
-.section-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 10px; }
-.api-row { display: flex; gap: 8px; }
-.api-input { flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-family: 'Space Mono', monospace; font-size: 12px; padding: 10px 14px; outline: none; -webkit-appearance: none; }
-.api-input:focus { border-color: rgba(245,166,35,0.4); }
-.api-input::placeholder { color: var(--dim); }
-.save-btn { background: var(--amber-dim); border: 1px solid rgba(245,166,35,0.3); border-radius: 10px; color: var(--amber); font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600; padding: 10px 16px; cursor: pointer; white-space: nowrap; }
-.api-status { font-size: 11px; margin-top: 8px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
-.status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--dim); flex-shrink: 0; }
-.setup-toggle { font-size: 11px; color: var(--blue); cursor: pointer; text-align: center; margin-bottom: 12px; display: block; }
-.setup-guide { background: var(--surface); border: 1px solid rgba(96,165,250,0.2); border-radius: 14px; padding: 16px; margin-bottom: 14px; display: none; }
-.setup-guide h3 { font-size: 13px; color: var(--blue); margin-bottom: 10px; }
-.setup-guide ol { font-size: 12px; color: var(--muted); padding-left: 18px; line-height: 2; }
-.setup-guide a { color: var(--blue); }
-.setup-guide .note { font-size: 11px; color: var(--dim); margin-top: 10px; font-family: 'Space Mono', monospace; }
-.fetch-btn { width: 100%; background: linear-gradient(135deg, #f5a623, #e8920f); border: none; border-radius: 14px; color: #000; font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 700; padding: 16px; cursor: pointer; margin-bottom: 18px; display: flex; align-items: center; justify-content: center; gap: 10px; transition: opacity 0.2s, transform 0.1s; }
-.fetch-btn:active { transform: scale(0.98); opacity: 0.9; }
-.fetch-btn:disabled { opacity: 0.5; }
-.error-box { background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.2); border-radius: 12px; padding: 14px 16px; font-size: 12px; color: var(--red); margin-bottom: 14px; display: none; font-family: 'Space Mono', monospace; word-break: break-word; }
-.cards-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 10px; }
-.route-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; margin-bottom: 12px; overflow: hidden; }
-.route-card.best { border-color: rgba(245,166,35,0.35); }
-.card-head { padding: 14px 16px 12px; display: flex; align-items: flex-start; justify-content: space-between; border-bottom: 1px solid var(--border); }
-.card-title-row { display: flex; align-items: center; gap: 10px; }
-.card-bar { width: 4px; height: 32px; border-radius: 2px; flex-shrink: 0; }
-.card-name { font-size: 16px; font-weight: 700; }
-.card-desc { font-size: 11px; color: var(--muted); margin-top: 2px; }
-.card-badge { font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 10px; border-radius: 6px; white-space: nowrap; flex-shrink: 0; }
-.card-metrics { padding: 14px 16px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-.metric { display: flex; flex-direction: column; gap: 3px; }
-.metric-lbl { font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
-.metric-val { font-family: 'Space Mono', monospace; font-size: 18px; font-weight: 700; line-height: 1; }
-.metric-sub { font-size: 10px; color: var(--muted); }
-.shimmer { background: linear-gradient(90deg, var(--surface2) 25%, var(--surface) 50%, var(--surface2) 75%) !important; background-size: 200% 100% !important; animation: sh 1.4s infinite; border-radius: 4px; color: transparent !important; min-width: 40px; height: 20px; display: inline-block; }
-@keyframes sh { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
-.card-foot { padding: 12px 16px 14px; border-top: 1px solid var(--border); display: flex; gap: 8px; }
-.nav-btn { flex: 1; padding: 10px; border-radius: 10px; font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; border: none; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px; }
-.btn-apple { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
-.btn-google { background: var(--surface2); color: var(--blue); border: 1px solid rgba(96,165,250,0.2); }
-.last-updated { font-size: 11px; color: var(--dim); text-align: center; font-family: 'Space Mono', monospace; padding-top: 4px; display: none; }
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--txt);
+  min-height:100dvh;padding:calc(var(--st) + 14px) 14px calc(var(--sb) + 14px)}
+.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{width:34px;height:34px;background:var(--amber-dim);border:1px solid var(--amber-bdr);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px}
+.logo-title{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--amber)}
+.logo-sub{font-size:11px;color:var(--muted)}
+.clk{text-align:right}
+.clk-time{font-family:'Space Mono',monospace;font-size:20px;line-height:1}
+.clk-date{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted)}
+/* route summary */
+.rsumm{background:var(--surf);border:1px solid var(--bdr);border-radius:13px;padding:12px 14px;margin-bottom:12px;display:flex;align-items:center;gap:12px}
+.rdots{display:flex;flex-direction:column;align-items:center}
+.rdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.rline{width:1px;height:18px;background:var(--bdr);margin:3px 0}
+.addrs{flex:1}
+.ablock{display:flex;flex-direction:column;gap:1px}
+.ablock+.ablock{margin-top:9px}
+.albl{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.aval{font-size:12px;font-weight:500}
+/* api */
+.api-sec{background:var(--surf);border:1px solid var(--bdr);border-radius:13px;padding:13px 14px;margin-bottom:12px}
+.slbl{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:9px}
+.api-row{display:flex;gap:8px}
+.api-in{flex:1;background:var(--bg);border:1px solid var(--bdr);border-radius:9px;color:var(--txt);font-family:'Space Mono',monospace;font-size:12px;padding:9px 12px;outline:none;-webkit-appearance:none}
+.api-in:focus{border-color:var(--amber-bdr)}
+.api-in::placeholder{color:var(--dim)}
+.save-btn{background:var(--amber-dim);border:1px solid var(--amber-bdr);border-radius:9px;color:var(--amber);font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;padding:9px 15px;cursor:pointer;white-space:nowrap}
+.api-st{font-size:11px;margin-top:7px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.st-dot{width:6px;height:6px;border-radius:50%;background:var(--dim);flex-shrink:0}
+/* setup */
+.setup-tog{font-size:11px;color:var(--blue);cursor:pointer;text-align:center;margin-bottom:11px;display:block}
+.setup-box{background:var(--surf);border:1px solid rgba(96,165,250,.2);border-radius:13px;padding:14px;margin-bottom:12px;display:none}
+.setup-box h3{font-size:13px;color:var(--blue);margin-bottom:9px}
+.setup-box ol{font-size:12px;color:var(--muted);padding-left:17px;line-height:2}
+.setup-box a{color:var(--blue)}
+.setup-box .note{font-size:11px;color:var(--dim);margin-top:9px;font-family:'Space Mono',monospace}
+/* rate badge */
+.rate-badge{background:var(--surf);border:1px solid var(--bdr);border-radius:10px;padding:9px 14px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+.rate-badge .rlbl{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.rate-badge .rval{font-family:'Space Mono',monospace;font-size:13px;color:var(--amber);font-weight:700}
+/* fetch btn */
+.fetch-btn{width:100%;background:linear-gradient(135deg,#f5a623,#e8920f);border:none;border-radius:13px;color:#000;font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;padding:15px;cursor:pointer;margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:9px;transition:opacity .2s,transform .1s}
+.fetch-btn:active{transform:scale(.98);opacity:.9}
+.fetch-btn:disabled{opacity:.5}
+/* error */
+.err-box{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:11px;padding:13px 14px;font-size:12px;color:var(--red);margin-bottom:12px;display:none;font-family:'Space Mono',monospace;word-break:break-word}
+/* cards */
+.cards-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:9px}
+.card{background:var(--surf);border:1px solid var(--bdr);border-radius:15px;margin-bottom:11px;overflow:hidden}
+.card.best{border-color:var(--amber-bdr);box-shadow:0 0 0 1px rgba(245,166,35,.1)}
+.card-hd{padding:13px 14px 11px;display:flex;align-items:flex-start;justify-content:space-between;border-bottom:1px solid var(--bdr)}
+.card-tr{display:flex;align-items:center;gap:9px}
+.cbar{width:4px;height:30px;border-radius:2px;flex-shrink:0}
+.cname{font-size:15px;font-weight:700}
+.cdesc{font-size:11px;color:var(--muted);margin-top:2px}
+.cbadge{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:6px;white-space:nowrap;flex-shrink:0}
+/* metrics row */
+.mrow{padding:12px 14px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;border-bottom:1px solid var(--bdr)}
+.metric{display:flex;flex-direction:column;gap:2px}
+.mlbl{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.mval{font-family:'Space Mono',monospace;font-size:17px;font-weight:700;line-height:1}
+.msub{font-size:10px;color:var(--muted)}
+/* toll breakdown */
+.toll-break{padding:11px 14px;border-bottom:1px solid var(--bdr)}
+.tb-title{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.tb-row{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;border-radius:8px;margin-bottom:5px}
+.tb-row:last-child{margin-bottom:0}
+.tb-label{font-size:12px;font-weight:600}
+.tb-sub{font-size:10px;color:var(--muted);margin-top:1px}
+.tb-amt{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;text-align:right}
+.tb-breakdown{font-size:10px;color:var(--muted);text-align:right;margin-top:1px}
+/* nav buttons */
+.card-ft{padding:11px 14px 13px;display:flex;gap:7px}
+.nav-btn{flex:1;padding:9px;border-radius:9px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;cursor:pointer;border:none;text-align:center;display:flex;align-items:center;justify-content:center;gap:5px}
+.btn-apple{background:var(--surf2);color:var(--txt);border:1px solid var(--bdr)}
+.btn-google{background:var(--surf2);color:var(--blue);border:1px solid rgba(96,165,250,.2)}
+/* shimmer */
+.shimmer{background:linear-gradient(90deg,var(--surf2) 25%,var(--surf) 50%,var(--surf2) 75%) !important;background-size:200% 100% !important;animation:sh 1.4s infinite;border-radius:4px;color:transparent !important;min-width:38px;height:18px;display:inline-block}
+@keyframes sh{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.upd{font-size:11px;color:var(--dim);text-align:center;font-family:'Space Mono',monospace;padding-top:3px;display:none}
 </style>
 </head>
 <body>
 
-<div class="header">
+<div class="hdr">
   <div class="logo">
     <div class="logo-icon">🛣️</div>
     <div>
@@ -105,451 +113,436 @@ body {
       <div class="logo-sub">MSS → OSH</div>
     </div>
   </div>
-  <div class="clock-wrap">
-    <div class="clock-time" id="js-clock">--:--</div>
-    <div class="clock-date" id="js-date"></div>
+  <div class="clk">
+    <div class="clk-time" id="js-clk">--:--</div>
+    <div class="clk-date" id="js-date"></div>
   </div>
 </div>
 
-<div class="route-summary">
-  <div class="dots">
-    <div class="dot dot-green"></div>
-    <div class="dot-line"></div>
-    <div class="dot dot-amber"></div>
+<div class="rsumm">
+  <div class="rdots">
+    <div class="rdot" style="background:var(--green)"></div>
+    <div class="rline"></div>
+    <div class="rdot" style="background:var(--amber)"></div>
   </div>
   <div class="addrs">
-    <div class="addr-block">
-      <div class="lbl">From</div>
-      <div class="val">7070 Derrycrest Dr, Mississauga</div>
-    </div>
-    <div class="addr-block">
-      <div class="lbl">To</div>
-      <div class="val">307 Homestead Dr, Oshawa</div>
-    </div>
+    <div class="ablock"><div class="albl">From</div><div class="aval">7070 Derrycrest Dr, Mississauga</div></div>
+    <div class="ablock"><div class="albl">To</div><div class="aval">307 Homestead Dr, Oshawa</div></div>
   </div>
 </div>
 
-<div class="api-section">
-  <div class="section-lbl">Google Maps API Key</div>
+<div class="api-sec">
+  <div class="slbl">Google Maps API Key</div>
   <div class="api-row">
-    <input type="password" id="js-apikey" class="api-input"
-      placeholder="AIza••••••••••••••••••••••"
-      autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+    <input type="text" id="js-key" class="api-in" placeholder="AIza..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
     <button class="save-btn" onclick="saveKey()">Save</button>
   </div>
-  <div class="api-status">
-    <div class="status-dot" id="js-status-dot"></div>
-    <span id="js-status-text">No key saved</span>
-  </div>
+  <div class="api-st"><div class="st-dot" id="js-st-dot"></div><span id="js-st-txt">No key saved</span></div>
 </div>
 
-<span class="setup-toggle" onclick="toggleSetup()">ⓘ How to get a free Google Maps API key</span>
-<div class="setup-guide" id="js-setup">
+<span class="setup-tog" onclick="toggleSetup()">ⓘ How to get a Google Maps API key</span>
+<div class="setup-box" id="js-setup">
   <h3>🔑 One-time setup (~5 min)</h3>
   <ol>
     <li>Go to <a href="https://console.cloud.google.com" target="_blank">console.cloud.google.com</a></li>
-    <li>Create a project (e.g. "Commute")</li>
-    <li>Enable the <strong>Routes API</strong></li>
-    <li>Go to <strong>APIs &amp; Services → Credentials</strong></li>
-    <li>Create an API key, restrict it to Routes API only</li>
-    <li>Paste it above and tap Save</li>
+    <li>Create a project, enable <strong>Routes API</strong></li>
+    <li>Enable <strong>Billing</strong> (required — free tier applies)</li>
+    <li>Create an API key under <strong>Credentials</strong></li>
+    <li>Paste key above and tap Save</li>
   </ol>
-  <p class="note">* Free tier covers ~10,000 requests/month.</p>
+  <p class="note">* Free tier: $200/month credit. Personal use ≈ $0.20/month.</p>
 </div>
 
-<button class="fetch-btn" id="js-fetch-btn" onclick="checkRoutes()">
-  <span>🔍</span><span id="js-btn-text">Check Routes Now</span>
+<div class="rate-badge">
+  <div>
+    <div class="rlbl">407 ETR Rate Period</div>
+    <div class="rval" id="js-rate-period">Loading...</div>
+  </div>
+  <div style="text-align:right">
+    <div class="rlbl">Effective</div>
+    <div class="rval" id="js-rate-type">Jan 1, 2026</div>
+  </div>
+</div>
+
+<button class="fetch-btn" id="js-btn" onclick="checkRoutes()">
+  <span>🔍</span><span id="js-btn-txt">Check Routes Now</span>
 </button>
 
-<div class="error-box" id="js-error"></div>
-
+<div class="err-box" id="js-err"></div>
 <div class="cards-lbl">Route Comparison</div>
 
-<!-- r401 -->
-<div class="route-card">
-  <div class="card-head">
-    <div class="card-title-row">
-      <div class="card-bar" style="background:var(--green)"></div>
-      <div>
-        <div class="card-name">Highway 401</div>
-        <div class="card-desc">No tolls — full 401 corridor</div>
-      </div>
+<!-- CARD: Full 401 -->
+<div class="card" id="c-r401">
+  <div class="card-hd">
+    <div class="card-tr">
+      <div class="cbar" style="background:var(--green)"></div>
+      <div><div class="cname">Highway 401</div><div class="cdesc">No tolls — full 401 corridor</div></div>
     </div>
-    <div class="card-badge" style="background:var(--green-dim);color:var(--green)">No Toll</div>
+    <div class="cbadge" style="background:var(--green-dim);color:var(--green)">No Toll</div>
   </div>
-  <div class="card-metrics">
-    <div class="metric">
-      <div class="metric-lbl">Duration</div>
-      <div class="metric-val" id="r401-dur">--</div>
-      <div class="metric-sub" id="r401-sub">min</div>
+  <div class="mrow">
+    <div class="metric"><div class="mlbl">Duration</div><div class="mval" id="r401-dur">--</div><div class="msub" id="r401-sub">min</div></div>
+    <div class="metric"><div class="mlbl">Total Toll</div><div class="mval" style="color:var(--green)" id="r401-toll">$0</div><div class="msub">CAD</div></div>
+    <div class="metric"><div class="mlbl">Arrives</div><div class="mval" id="r401-eta" style="font-size:14px">--:--</div><div class="msub" id="r401-ampm"></div></div>
+  </div>
+  <div class="toll-break">
+    <div class="tb-title">Toll Breakdown</div>
+    <div class="tb-row" style="background:var(--green-dim)">
+      <div><div class="tb-label" style="color:var(--green)">With Transponder</div><div class="tb-sub">No 407 usage</div></div>
+      <div><div class="tb-amt" style="color:var(--green)">$0.00</div><div class="tb-breakdown">No charges</div></div>
     </div>
-    <div class="metric">
-      <div class="metric-lbl">Toll Cost</div>
-      <div class="metric-val" id="r401-toll" style="color:var(--green)">$0</div>
-      <div class="metric-sub">CAD</div>
-    </div>
-    <div class="metric">
-      <div class="metric-lbl">Arrives</div>
-      <div class="metric-val" id="r401-eta" style="font-size:15px">--:--</div>
-      <div class="metric-sub" id="r401-ampm"></div>
+    <div class="tb-row" style="background:rgba(255,255,255,0.03)">
+      <div><div class="tb-label" style="color:var(--muted)">Without Transponder</div><div class="tb-sub">No 407 usage</div></div>
+      <div><div class="tb-amt" style="color:var(--muted)">$0.00</div><div class="tb-breakdown">No charges</div></div>
     </div>
   </div>
-  <div class="card-foot">
+  <div class="card-ft">
     <button class="nav-btn btn-apple" onclick="openNav('apple','r401')">🍎 Apple Maps</button>
     <button class="nav-btn btn-google" onclick="openNav('google','r401')">🗺 Google Maps</button>
   </div>
 </div>
 
-<!-- r407p -->
-<div class="route-card best">
-  <div class="card-head">
-    <div class="card-title-row">
-      <div class="card-bar" style="background:var(--amber)"></div>
-      <div>
-        <div class="card-name">Partial 407</div>
-        <div class="card-desc">Hurontario → Brock Rd, then 401</div>
-      </div>
+<!-- CARD: Partial 407 -->
+<div class="card best" id="c-r407p">
+  <div class="card-hd">
+    <div class="card-tr">
+      <div class="cbar" style="background:var(--amber)"></div>
+      <div><div class="cname">Partial 407</div><div class="cdesc">Hwy 410 → Brock Rd, then 401</div></div>
     </div>
-    <div class="card-badge" style="background:var(--amber-dim);color:var(--amber)">★ Best</div>
+    <div class="cbadge" style="background:var(--amber-dim);color:var(--amber)">★ Best</div>
   </div>
-  <div class="card-metrics">
-    <div class="metric">
-      <div class="metric-lbl">Duration</div>
-      <div class="metric-val" id="r407p-dur">--</div>
-      <div class="metric-sub" id="r407p-sub">min</div>
+  <div class="mrow">
+    <div class="metric"><div class="mlbl">Duration</div><div class="mval" id="r407p-dur">--</div><div class="msub" id="r407p-sub">min</div></div>
+    <div class="metric"><div class="mlbl">407 Toll</div><div class="mval" style="color:var(--amber)" id="r407p-toll">--</div><div class="msub">CAD est.</div></div>
+    <div class="metric"><div class="mlbl">Arrives</div><div class="mval" id="r407p-eta" style="font-size:14px">--:--</div><div class="msub" id="r407p-ampm"></div></div>
+  </div>
+  <div class="toll-break">
+    <div class="tb-title">Toll Breakdown — 2026 ETR Rates</div>
+    <div class="tb-row" style="background:var(--amber-dim)">
+      <div><div class="tb-label" style="color:var(--amber)">With Transponder</div><div class="tb-sub">Per-km + $1 trip charge</div></div>
+      <div><div class="tb-amt" style="color:var(--amber)" id="r407p-w-xp">--</div><div class="tb-breakdown" id="r407p-w-xp-sub">calculating...</div></div>
     </div>
-    <div class="metric">
-      <div class="metric-lbl">Toll Cost</div>
-      <div class="metric-val" id="r407p-toll" style="color:var(--amber)">--</div>
-      <div class="metric-sub">CAD est.</div>
-    </div>
-    <div class="metric">
-      <div class="metric-lbl">Arrives</div>
-      <div class="metric-val" id="r407p-eta" style="font-size:15px">--:--</div>
-      <div class="metric-sub" id="r407p-ampm"></div>
+    <div class="tb-row" style="background:rgba(255,255,255,0.03)">
+      <div><div class="tb-label" style="color:var(--muted)">Without Transponder</div><div class="tb-sub">+ $5.30 camera charge</div></div>
+      <div><div class="tb-amt" style="color:var(--muted)" id="r407p-no-xp">--</div><div class="tb-breakdown" id="r407p-no-xp-sub">calculating...</div></div>
     </div>
   </div>
-  <div class="card-foot">
+  <div class="card-ft">
     <button class="nav-btn btn-apple" onclick="openNav('apple','r407p')">🍎 Apple Maps</button>
     <button class="nav-btn btn-google" onclick="openNav('google','r407p')">🗺 Google Maps</button>
   </div>
 </div>
 
-<!-- r407f -->
-<div class="route-card">
-  <div class="card-head">
-    <div class="card-title-row">
-      <div class="card-bar" style="background:var(--red)"></div>
-      <div>
-        <div class="card-name">Full 407</div>
-        <div class="card-desc">407 end-to-end — maximum bypass</div>
-      </div>
+<!-- CARD: Full 407 -->
+<div class="card" id="c-r407f">
+  <div class="card-hd">
+    <div class="card-tr">
+      <div class="cbar" style="background:var(--red)"></div>
+      <div><div class="cname">Full 407</div><div class="cdesc">407 end-to-end via Hwy 427</div></div>
     </div>
-    <div class="card-badge" style="background:var(--red-dim);color:var(--red)">Max Cost</div>
+    <div class="cbadge" style="background:var(--red-dim);color:var(--red)">Max Bypass</div>
   </div>
-  <div class="card-metrics">
-    <div class="metric">
-      <div class="metric-lbl">Duration</div>
-      <div class="metric-val" id="r407f-dur">--</div>
-      <div class="metric-sub" id="r407f-sub">min</div>
+  <div class="mrow">
+    <div class="metric"><div class="mlbl">Duration</div><div class="mval" id="r407f-dur">--</div><div class="msub" id="r407f-sub">min</div></div>
+    <div class="metric"><div class="mlbl">407 Toll</div><div class="mval" style="color:var(--red)" id="r407f-toll">--</div><div class="msub">CAD est.</div></div>
+    <div class="metric"><div class="mlbl">Arrives</div><div class="mval" id="r407f-eta" style="font-size:14px">--:--</div><div class="msub" id="r407f-ampm"></div></div>
+  </div>
+  <div class="toll-break">
+    <div class="tb-title">Toll Breakdown — 2026 ETR Rates</div>
+    <div class="tb-row" style="background:rgba(248,113,113,0.08)">
+      <div><div class="tb-label" style="color:var(--red)">With Transponder</div><div class="tb-sub">Per-km + $1 trip charge</div></div>
+      <div><div class="tb-amt" style="color:var(--red)" id="r407f-w-xp">--</div><div class="tb-breakdown" id="r407f-w-xp-sub">calculating...</div></div>
     </div>
-    <div class="metric">
-      <div class="metric-lbl">Toll Cost</div>
-      <div class="metric-val" id="r407f-toll" style="color:var(--red)">--</div>
-      <div class="metric-sub">CAD est.</div>
-    </div>
-    <div class="metric">
-      <div class="metric-lbl">Arrives</div>
-      <div class="metric-val" id="r407f-eta" style="font-size:15px">--:--</div>
-      <div class="metric-sub" id="r407f-ampm"></div>
+    <div class="tb-row" style="background:rgba(255,255,255,0.03)">
+      <div><div class="tb-label" style="color:var(--muted)">Without Transponder</div><div class="tb-sub">+ $5.30 camera charge</div></div>
+      <div><div class="tb-amt" style="color:var(--muted)" id="r407f-no-xp">--</div><div class="tb-breakdown" id="r407f-no-xp-sub">calculating...</div></div>
     </div>
   </div>
-  <div class="card-foot">
+  <div class="card-ft">
     <button class="nav-btn btn-apple" onclick="openNav('apple','r407f')">🍎 Apple Maps</button>
     <button class="nav-btn btn-google" onclick="openNav('google','r407f')">🗺 Google Maps</button>
   </div>
 </div>
 
-<div class="last-updated" id="js-updated"></div>
+<div class="upd" id="js-upd"></div>
 
 <script>
-// ─── CONFIG ───────────────────────────────────────────────────────────────────
+// ─── ADDRESSES & COORDINATES ──────────────────────────────────────────────────
 var ORIGIN_ADDR = "7070 Derrycrest Dr, Mississauga, ON L5W 0G5";
 var DEST_ADDR   = "307 Homestead Dr, Oshawa, ON L1J 6V2";
 var ORIGIN_LAT  = 43.6441, ORIGIN_LNG = -79.7101;
 var DEST_LAT    = 43.8981, DEST_LNG   = -78.9008;
 
-// Each key matches the ID prefix used in HTML (e.g. r401-dur, r401-toll, r401-eta)
-var ROUTES = {
-  r401: {
-    avoidTolls: true,
-    intermediates: []
-  },
-  r407p: {
-    avoidTolls: false,
-    intermediates: [
-      { latitude: 43.686, longitude: -79.667 },
-      { latitude: 43.839, longitude: -79.070 }
-    ]
-  },
-  r407f: {
-    avoidTolls: false,
-    intermediates: [
-      { latitude: 43.822, longitude: -79.366 }
-    ]
-  }
-};
+// ─── 407 ETR RATE TABLE (2026, Eastbound, ¢/km) ───────────────────────────────
+// Zones 1-12. Rows = time periods (minutes since midnight when period STARTS).
+// Source: 407etr.com/en/rate-chart-light effective Jan 1 2026
+var RATE_PERIODS = [
+  // [startMin, label,          z1,     z2,     z3,     z4,     z5,     z6,      z7,      z8,      z9,      z10,    z11,    z12   ]
+  [  0,  "Off-Peak (overnight)", 50.66,  50.56,  50.53,  50.49,  50.56,  50.56,   50.56,   50.56,   50.56,   50.56,  50.56,  50.56 ],
+  [300,  "Early AM (5–7am)",     79.13,  65.16,  66.61,  61.18,  79.08,  71.55,   76.23,   72.83,   72.83,   56.49,  64.05,  64.05 ],
+  [420,  "AM Peak (7–9:30am)",   97.39,  65.17,  67.47,  69.59,  85.35, 100.12,  108.79,  108.79,  108.79,   62.30,  99.24,  99.24 ],
+  [570,  "Mid-Morning (9:30–10:30am)", 79.08, 65.16, 66.59, 61.18, 79.08, 71.55,  76.23,   72.83,   72.83,   62.29,  66.50,  66.50 ],
+  [630,  "Midday (10:30am–2:30pm)",    79.07, 65.15, 66.58, 61.17, 79.07, 71.54,  76.22,   72.82,   72.82,   56.48,  62.27,  64.04 ],
+  [870,  "Early PM (2:30–3:30pm)",     99.81, 65.17, 67.48, 69.59, 79.08, 71.55,  76.23,   72.83,   72.83,   62.28,  62.28,  64.05 ],
+  [930,  "PM Peak (3:30–6pm)",         99.81, 65.18, 67.49, 69.60, 85.36,100.13,  108.80,  108.79,  108.79,   62.29,  70.76,  70.76 ],
+  [1080, "Evening (6–9pm)",            79.08, 65.17, 66.59, 69.48, 79.08, 71.55,   76.23,   72.83,   72.83,   62.28,  62.28,  64.05 ],
+  [1260, "Off-Peak (9pm+)",            50.66, 50.56, 50.53, 50.49, 50.56, 50.56,   50.56,   50.56,   50.56,   50.56,  50.56,  50.56 ]
+];
 
-var NAV_WPS = {
-  r401:  [],
-  r407p: ["43.686,-79.667", "43.839,-79.070"],
-  r407f: ["43.822,-79.366"]
-};
+// Weekend rates (eastbound) - 407etr.com
+var RATE_PERIODS_WE = [
+  [   0, "Off-Peak (overnight)", 49.93,50.56,50.56,50.56,50.56,50.56,50.56,50.56,50.56,50.56,50.56,50.56],
+  [ 510, "Weekend Morning (8:30am–10am)", 49.94,50.57,50.57,50.57,50.57,71.91,71.91,71.91,71.91,56.14,50.57,71.90],
+  [ 600, "Weekend Midday (10am–7pm)", 49.95,50.58,50.58,50.58,50.58,79.01,87.27,87.27,87.27,56.15,52.84,84.04],
+  [1140, "Weekend Evening (7–9pm)", 49.94,50.57,50.57,50.57,50.57,50.57,50.57,50.57,50.57,50.57,50.57,71.91],
+  [1260, "Off-Peak (9pm+)",        49.93,50.56,50.56,50.56,50.56,50.56,50.56,50.56,50.56,50.56,50.56,50.56]
+];
+
+// ─── ZONE DISTANCES FOR OUR SPECIFIC ROUTES (km, approximate) ────────────────
+// Zone index: 0=Z1, 1=Z2, ... 5=Z6, 6=Z7, 7=Z8, 8=Z9, 9=Z10, 10=Z11, 11=Z12
+// Partial 407: enter near Hwy 410 (Zone 6 start), exit Brock Rd (Zone 12 end)
+var ZONES_PARTIAL = [0, 0, 0, 0, 0, 5.5, 11.5, 12.5, 5.5, 12.0, 10.5, 14.5]; // ~72 km
+// Full 407: enter near Hwy 427 (Zone 7 start), exit Brock Rd
+var ZONES_FULL    = [0, 0, 0, 0, 0, 0,   11.5, 12.5, 5.5, 12.0, 10.5, 14.5]; // ~66.5 km
+
+// ─── FEES ─────────────────────────────────────────────────────────────────────
+var TRIP_CHARGE  = 1.00;   // per trip, both transponder and not
+var CAMERA_CHG   = 5.30;   // no transponder only
 
 // ─── STATE ────────────────────────────────────────────────────────────────────
 var apiKey = "";
 
 // ─── UTILS ────────────────────────────────────────────────────────────────────
-function g(id) {
-  return document.getElementById(id);
-}
+function g(id){ return document.getElementById(id); }
+function setText(id,v){ var n=g(id); if(n) n.textContent=String(v); }
+function pad(n){ return n<10?"0"+n:""+n; }
 
-function setText(id, val) {
-  var node = g(id);
-  if (node) { node.textContent = String(val); }
-}
-
-function pad(n) {
-  return n < 10 ? "0" + n : "" + n;
-}
-
-function setShimmer(prefix, on) {
-  var ids = [prefix + "-dur", prefix + "-sub", prefix + "-toll", prefix + "-eta"];
-  for (var i = 0; i < ids.length; i++) {
-    var node = g(ids[i]);
-    if (node) {
-      if (on) { node.classList.add("shimmer"); }
-      else    { node.classList.remove("shimmer"); }
-    }
-  }
-}
-
-// ─── CLOCK ────────────────────────────────────────────────────────────────────
-function tick() {
-  var now  = new Date();
-  var h = now.getHours(), m = now.getMinutes();
-  setText("js-clock", pad(h) + ":" + pad(m));
-  var days   = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-  var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-  setText("js-date", days[now.getDay()] + " " + months[now.getMonth()] + " " + now.getDate());
-}
-setInterval(tick, 1000);
-tick();
-
-// ─── API KEY ──────────────────────────────────────────────────────────────────
-function loadKey() {
-  var found = "";
-  // Try localStorage first
-  try { found = localStorage.getItem("cmtr_key") || ""; } catch(e) {}
-  // Fallback: URL hash (e.g. index.html#AIza...)
-  if (!found && window.location.hash) {
-    var h = window.location.hash.replace("#","").trim();
-    if (h.length > 10) { found = h; }
-  }
-  if (found) {
-    apiKey = found;
-    var inp = g("js-apikey");
-    if (inp) { inp.value = found; }
+// ─── KEY PERSISTENCE ──────────────────────────────────────────────────────────
+function loadKey(){
+  var k="";
+  try{ k=localStorage.getItem("cmtr_k")||""; }catch(e){}
+  if(!k){ try{ k=sessionStorage.getItem("cmtr_k")||""; }catch(e){} }
+  if(!k && window.location.hash){ k=decodeURIComponent(window.location.hash.replace("#","")); }
+  if(k && k.length>10){
+    apiKey=k;
+    var inp=g("js-key"); if(inp) inp.value=k;
     markKeyOk();
   }
 }
 
-function saveKey() {
-  var input = g("js-apikey");
-  var val = input.value.trim();
-  if (!val || val.length < 10) {
-    alert("Paste a valid API key first.");
-    return;
-  }
-  apiKey = val;
-  // Try all persistence methods
-  try { localStorage.setItem("cmtr_key", val); } catch(e) {}
-  try { sessionStorage.setItem("cmtr_key", val); } catch(e) {}
-  // Store in URL hash as universal fallback (no privacy restrictions)
-  try { window.location.hash = val; } catch(e) {}
+function saveKey(){
+  var inp=g("js-key"); if(!inp) return;
+  var v=inp.value.trim();
+  if(!v||v.length<10){ alert("Paste a valid API key first."); return; }
+  apiKey=v;
+  try{ localStorage.setItem("cmtr_k",v); }catch(e){}
+  try{ sessionStorage.setItem("cmtr_k",v); }catch(e){}
+  try{ history.replaceState(null,"","#"+encodeURIComponent(v)); }catch(e){}
   markKeyOk();
 }
 
-function markKeyOk() {
-  var dot = g("js-status-dot");
-  var txt = g("js-status-text");
-  if (dot) { dot.style.background = "var(--green)"; }
-  if (txt) { txt.textContent = "Key saved ✓"; txt.style.color = "var(--green)"; }
+function markKeyOk(){
+  var d=g("js-st-dot"); if(d) d.style.background="var(--green)";
+  var t=g("js-st-txt"); if(t){ t.textContent="Key saved ✓"; t.style.color="var(--green)"; }
 }
 
-function toggleSetup() {
-  var el = g("js-setup");
-  if (el) { el.style.display = el.style.display === "block" ? "none" : "block"; }
+function toggleSetup(){
+  var el=g("js-setup"); if(el) el.style.display=el.style.display==="block"?"none":"block";
 }
 
-// ─── FETCH ────────────────────────────────────────────────────────────────────
-function checkRoutes() {
-  // Resolve key: memory → input field → sessionStorage → hash
-  var key = apiKey;
-  if (!key) { try { key = sessionStorage.getItem("cmtr_key") || ""; } catch(e) {} }
-  if (!key) {
-    var inp = g("js-apikey");
-    if (inp) { key = inp.value.trim(); }
+// ─── 407 TOLL CALCULATOR ──────────────────────────────────────────────────────
+function getRatePeriod(now){
+  var isWE = (now.getDay()===0||now.getDay()===6);
+  var mins = now.getHours()*60 + now.getMinutes();
+  var table = isWE ? RATE_PERIODS_WE : RATE_PERIODS;
+  var row = table[0];
+  for(var i=0;i<table.length;i++){
+    if(mins>=table[i][0]) row=table[i];
+    else break;
   }
-  if (!key && window.location.hash) {
-    key = window.location.hash.replace("#","").trim();
-  }
-  if (!key || key.length < 10) {
-    showError("Paste your API key into the field above and tap Save.");
-    return;
-  }
-  apiKey = key;
-
-  var btn = g("js-fetch-btn");
-  if (btn) { btn.disabled = true; }
-  setText("js-btn-text", "Fetching live traffic…");
-
-  var errBox = g("js-error");
-  if (errBox) { errBox.style.display = "none"; }
-
-  var ids = ["r401", "r407p", "r407f"];
-  for (var i = 0; i < ids.length; i++) { setShimmer(ids[i], true); }
-
-  var promises = ids.map(function(id) { return fetchRoute(id, key); });
-
-  Promise.all(promises)
-    .then(function() {
-      var now = new Date();
-      setText("js-updated", "Last updated " + pad(now.getHours()) + ":" + pad(now.getMinutes()));
-      var u = g("js-updated");
-      if (u) { u.style.display = "block"; }
-    })
-    .catch(function(err) {
-      var msg = (err && err.message) ? err.message : String(err);
-      showError("API Error: " + msg);
-      for (var i = 0; i < ids.length; i++) { setShimmer(ids[i], false); }
-    })
-    .finally(function() {
-      var b = g("js-fetch-btn");
-      if (b) { b.disabled = false; }
-      setText("js-btn-text", "Refresh Routes");
-    });
+  return row;
 }
 
-function fetchRoute(prefix, key) {
-  var cfg  = ROUTES[prefix];
-  var body = {
-    origin:      { address: ORIGIN_ADDR },
-    destination: { address: DEST_ADDR },
-    travelMode:  "DRIVE",
-    routingPreference: "TRAFFIC_AWARE_OPTIMAL",
-    computeAlternativeRoutes: false,
-    extraComputations: ["TOLLS"],
-    routeModifiers: { avoidTolls: cfg.avoidTolls }
+function calcToll(zoneDists, rateRow){
+  // rateRow: [startMin, label, z1rate, z2rate, ... z12rate]
+  var distToll = 0;
+  for(var z=0;z<12;z++){
+    var km   = zoneDists[z];
+    var rate = rateRow[z+2]; // offset by 2 (startMin, label)
+    distToll += km * rate / 100; // cents to dollars
+  }
+  var withXp  = distToll + TRIP_CHARGE;
+  var noXp    = distToll + TRIP_CHARGE + CAMERA_CHG;
+  return { distToll: distToll, withXp: withXp, noXp: noXp };
+}
+
+// ─── CLOCK & RATE PERIOD DISPLAY ──────────────────────────────────────────────
+var DAYS   = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+function tick(){
+  var now=new Date();
+  setText("js-clk", pad(now.getHours())+":"+pad(now.getMinutes()));
+  setText("js-date", DAYS[now.getDay()]+" "+MONTHS[now.getMonth()]+" "+now.getDate());
+  var row=getRatePeriod(now);
+  setText("js-rate-period", row[1]);
+}
+setInterval(tick,1000);
+tick();
+
+// ─── SHIMMER ──────────────────────────────────────────────────────────────────
+function shimmer(ids, on){
+  for(var i=0;i<ids.length;i++){
+    var n=g(ids[i]);
+    if(n){ if(on) n.classList.add("shimmer"); else n.classList.remove("shimmer"); }
+  }
+}
+
+// ─── FORMAT HELPERS ───────────────────────────────────────────────────────────
+function fmtDur(sec){
+  var h=Math.floor(sec/3600), m=Math.floor((sec%3600)/60);
+  return h>0 ? {val:h+"h "+m+"m",sub:"hr:min"} : {val:""+m,sub:"min"};
+}
+function fmtETA(sec){
+  var a=new Date(Date.now()+sec*1000);
+  var h=a.getHours(),m=a.getMinutes();
+  return {val:(h%12||12)+":"+pad(m), ampm:h>=12?"PM":"AM"};
+}
+function fmtC(n){ return "$"+n.toFixed(2); }
+
+// ─── FETCH ROUTES ─────────────────────────────────────────────────────────────
+var ROUTES = {
+  r401:  { avoidTolls:true,  intermediates:[] },
+  r407p: { avoidTolls:false, intermediates:[{latitude:43.686,longitude:-79.667},{latitude:43.839,longitude:-79.070}] },
+  r407f: { avoidTolls:false, intermediates:[{latitude:43.822,longitude:-79.366}] }
+};
+
+function fetchRoute(id, key){
+  var cfg=ROUTES[id];
+  var body={
+    origin:{address:ORIGIN_ADDR}, destination:{address:DEST_ADDR},
+    travelMode:"DRIVE", routingPreference:"TRAFFIC_AWARE_OPTIMAL",
+    computeAlternativeRoutes:false,
+    routeModifiers:{avoidTolls:cfg.avoidTolls}
   };
-
-  if (cfg.intermediates.length > 0) {
-    body.intermediates = cfg.intermediates.map(function(wp) {
-      return { via: true, location: { latLng: { latitude: wp.latitude, longitude: wp.longitude } } };
+  if(cfg.intermediates.length>0){
+    body.intermediates=cfg.intermediates.map(function(wp){
+      return {via:true,location:{latLng:{latitude:wp.latitude,longitude:wp.longitude}}};
     });
   }
-
-  return fetch(
-    "https://routes.googleapis.com/directions/v2:computeRoutes?key=" + key,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Goog-FieldMask": "routes.duration,routes.distanceMeters,routes.travelAdvisory.tollInfo"
-      },
-      body: JSON.stringify(body)
-    }
-  )
-  .then(function(res) {
-    return res.json().then(function(data) {
-      return { ok: res.ok, status: res.status, data: data };
-    });
+  return fetch("https://routes.googleapis.com/directions/v2:computeRoutes?key="+key,{
+    method:"POST",
+    headers:{"Content-Type":"application/json","X-Goog-FieldMask":"routes.duration,routes.distanceMeters"},
+    body:JSON.stringify(body)
   })
-  .then(function(r) {
-    if (!r.ok) {
-      var apiMsg = r.data && r.data.error && r.data.error.message ? r.data.error.message : ("HTTP " + r.status);
-      throw new Error("[" + prefix + "] " + apiMsg);
+  .then(function(res){ return res.json().then(function(d){ return {ok:res.ok,status:res.status,data:d}; }); })
+  .then(function(r){
+    if(!r.ok){
+      var msg=r.data&&r.data.error&&r.data.error.message?r.data.error.message:"HTTP "+r.status;
+      throw new Error("["+id+"] "+msg);
     }
-    if (!r.data.routes || r.data.routes.length === 0) {
-      throw new Error("[" + prefix + "] No route returned");
-    }
-
-    var route    = r.data.routes[0];
-    var durStr   = (route.duration || "0s").replace("s", "");
-    var durSec   = parseInt(durStr, 10) || 0;
-    var tollInfo = route.travelAdvisory && route.travelAdvisory.tollInfo ? route.travelAdvisory.tollInfo : null;
-
-    var dur  = fmtDur(durSec);
-    var eta  = fmtETA(durSec);
-    var toll = fmtToll(tollInfo);
-
-    setShimmer(prefix, false);
-    setText(prefix + "-dur",  dur.val);
-    setText(prefix + "-sub",  dur.sub);
-    setText(prefix + "-toll", toll);
-    setText(prefix + "-eta",  eta.val);
-    setText(prefix + "-ampm", eta.ampm);
+    if(!r.data.routes||r.data.routes.length===0) throw new Error("["+id+"] No route returned");
+    var route=r.data.routes[0];
+    var sec=parseInt((route.duration||"0s").replace("s",""),10)||0;
+    return sec;
   });
 }
 
-// ─── FORMATTERS ───────────────────────────────────────────────────────────────
-function fmtDur(sec) {
-  var h = Math.floor(sec / 3600);
-  var m = Math.floor((sec % 3600) / 60);
-  if (h > 0) { return { val: h + "h " + m + "m", sub: "hr : min" }; }
-  return { val: "" + m, sub: "min" };
-}
+function checkRoutes(){
+  // Resolve key
+  var key=apiKey;
+  if(!key){ try{ key=localStorage.getItem("cmtr_k")||""; }catch(e){} }
+  if(!key){ try{ key=sessionStorage.getItem("cmtr_k")||""; }catch(e){} }
+  if(!key&&window.location.hash){ key=decodeURIComponent(window.location.hash.replace("#","")); }
+  if(!key){ var inp=g("js-key"); if(inp) key=inp.value.trim(); }
+  if(!key||key.length<10){ showErr("Paste your API key into the field above and tap Save."); return; }
+  apiKey=key;
 
-function fmtETA(sec) {
-  var arr  = new Date(Date.now() + sec * 1000);
-  var h    = arr.getHours();
-  var m    = arr.getMinutes();
-  var ampm = h >= 12 ? "PM" : "AM";
-  var h12  = h % 12 || 12;
-  return { val: h12 + ":" + pad(m), ampm: ampm };
-}
+  var btn=g("js-btn"); if(btn) btn.disabled=true;
+  setText("js-btn-txt","Fetching live traffic…");
+  var eb=g("js-err"); if(eb) eb.style.display="none";
 
-function fmtToll(tollInfo) {
-  if (!tollInfo) { return "$0"; }
-  var prices = tollInfo.estimatedPrice;
-  if (!prices || prices.length === 0) { return "$0"; }
-  var p       = prices[0];
-  var dollars = parseInt(p.units || 0, 10);
-  var cents   = Math.round((p.nanos || 0) / 1e7);
-  return "$" + (dollars + cents / 100).toFixed(0);
+  shimmer(["r401-dur","r401-sub","r401-eta","r401-ampm",
+           "r407p-dur","r407p-sub","r407p-eta","r407p-ampm","r407p-toll","r407p-w-xp","r407p-no-xp",
+           "r407f-dur","r407f-sub","r407f-eta","r407f-ampm","r407f-toll","r407f-w-xp","r407f-no-xp"], true);
+
+  // Calculate tolls from rate table at current time
+  var now=new Date();
+  var rateRow=getRatePeriod(now);
+  var tp = calcToll(ZONES_PARTIAL, rateRow);
+  var tf = calcToll(ZONES_FULL,    rateRow);
+
+  var allIds=["r401-dur","r401-sub","r401-eta","r401-ampm",
+              "r407p-dur","r407p-sub","r407p-eta","r407p-ampm","r407p-toll","r407p-w-xp","r407p-w-xp-sub","r407p-no-xp","r407p-no-xp-sub",
+              "r407f-dur","r407f-sub","r407f-eta","r407f-ampm","r407f-toll","r407f-w-xp","r407f-w-xp-sub","r407f-no-xp","r407f-no-xp-sub"];
+
+  Promise.all([
+    fetchRoute("r401", key),
+    fetchRoute("r407p", key),
+    fetchRoute("r407f", key)
+  ])
+  .then(function(results){
+    shimmer(allIds, false);
+
+    // 401
+    var d0=fmtDur(results[0]), e0=fmtETA(results[0]);
+    setText("r401-dur",d0.val); setText("r401-sub",d0.sub);
+    setText("r401-eta",e0.val); setText("r401-ampm",e0.ampm);
+
+    // Partial 407
+    var d1=fmtDur(results[1]), e1=fmtETA(results[1]);
+    setText("r407p-dur",d1.val); setText("r407p-sub",d1.sub);
+    setText("r407p-eta",e1.val); setText("r407p-ampm",e1.ampm);
+    setText("r407p-toll", fmtC(tp.withXp));
+    setText("r407p-w-xp", fmtC(tp.withXp));
+    setText("r407p-w-xp-sub", fmtC(tp.distToll)+" km toll + $1.00 trip charge");
+    setText("r407p-no-xp", fmtC(tp.noXp));
+    setText("r407p-no-xp-sub", fmtC(tp.distToll)+" km toll + $1.00 + $5.30 cam");
+
+    // Full 407
+    var d2=fmtDur(results[2]), e2=fmtETA(results[2]);
+    setText("r407f-dur",d2.val); setText("r407f-sub",d2.sub);
+    setText("r407f-eta",e2.val); setText("r407f-ampm",e2.ampm);
+    setText("r407f-toll", fmtC(tf.withXp));
+    setText("r407f-w-xp", fmtC(tf.withXp));
+    setText("r407f-w-xp-sub", fmtC(tf.distToll)+" km toll + $1.00 trip charge");
+    setText("r407f-no-xp", fmtC(tf.noXp));
+    setText("r407f-no-xp-sub", fmtC(tf.distToll)+" km toll + $1.00 + $5.30 cam");
+
+    var upd=g("js-upd");
+    if(upd){ upd.textContent="Updated "+pad(now.getHours())+":"+pad(now.getMinutes())+" · "+rateRow[1]; upd.style.display="block"; }
+  })
+  .catch(function(err){
+    shimmer(allIds, false);
+    showErr("API Error: "+(err&&err.message?err.message:String(err)));
+  })
+  .finally(function(){
+    var b=g("js-btn"); if(b) b.disabled=false;
+    setText("js-btn-txt","Refresh Routes");
+  });
 }
 
 // ─── NAVIGATION ───────────────────────────────────────────────────────────────
-function openNav(platform, prefix) {
-  var wps = NAV_WPS[prefix] || [];
-  if (platform === "apple") {
-    var url = "maps://maps.apple.com/?saddr=" + ORIGIN_LAT + "," + ORIGIN_LNG +
-              "&daddr=" + DEST_LAT + "," + DEST_LNG + "&dirflg=d";
-    window.location.href = url;
+var NAV_WPS = {
+  r401:  [],
+  r407p: ["43.686,-79.667","43.839,-79.070"],
+  r407f: ["43.822,-79.366"]
+};
+function openNav(platform, id){
+  var wps=NAV_WPS[id]||[];
+  if(platform==="apple"){
+    var url="maps://maps.apple.com/?saddr="+ORIGIN_LAT+","+ORIGIN_LNG+"&daddr="+DEST_LAT+","+DEST_LNG+"&dirflg=d";
+    window.location.href=url;
   } else {
-    var url = "https://www.google.com/maps/dir/?api=1" +
-              "&origin=" + encodeURIComponent(ORIGIN_ADDR) +
-              "&destination=" + encodeURIComponent(DEST_ADDR) +
-              "&travelmode=driving";
-    if (wps.length > 0) { url += "&waypoints=" + encodeURIComponent(wps.join("|")); }
-    window.open(url, "_blank");
+    var url="https://www.google.com/maps/dir/?api=1&origin="+encodeURIComponent(ORIGIN_ADDR)+"&destination="+encodeURIComponent(DEST_ADDR)+"&travelmode=driving";
+    if(wps.length>0) url+="&waypoints="+encodeURIComponent(wps.join("|"));
+    window.open(url,"_blank");
   }
 }
 
 // ─── ERROR ────────────────────────────────────────────────────────────────────
-function showError(msg) {
-  var box = g("js-error");
-  if (box) { box.textContent = msg; box.style.display = "block"; }
+function showErr(msg){
+  var b=g("js-err"); if(b){ b.textContent=msg; b.style.display="block"; }
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
